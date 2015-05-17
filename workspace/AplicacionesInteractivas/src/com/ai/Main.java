@@ -26,6 +26,7 @@ import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import com.ai.ui.Colocacion;
 import com.ai.ui.Ediciones;
 
 public class Main {
@@ -76,6 +77,13 @@ public class Main {
 		frame.getContentPane().add(btnAbmEdiciones);
 		
 		JButton btnAbmColocaciones = new JButton("ABM Colocaciones");
+		btnAbmColocaciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Colocacion colocacionFrame = new Colocacion();
+				colocacionFrame.pack();
+				colocacionFrame.setVisible(true);
+			}
+		});
 		btnAbmColocaciones.setBounds(15, 91, 252, 59);
 		frame.getContentPane().add(btnAbmColocaciones);
 	}
