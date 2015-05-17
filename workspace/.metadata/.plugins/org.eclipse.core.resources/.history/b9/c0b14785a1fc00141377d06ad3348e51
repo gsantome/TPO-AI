@@ -1,0 +1,34 @@
+package com.ai.models;
+
+import java.util.Vector;
+
+public class Publicacion {
+	private Vector<Edicion> ediciones;
+	private int codigo;
+	private String titulo;
+	private String tipoPublicacion;
+	private String editor;
+	private String tema;
+	private String subtema;
+	private Boolean sePublico;
+	private String periodicidad;
+	private String idioma;
+	private String paisOrigen;
+	
+	public Publicacion() {
+		
+	}
+	
+	public Publicacion(int codigo, String titulo, String tipoPublicacion, String editor, String tema, String subtema, Boolean sePublico, String periodicidad, String idioma, String paisOrigen) {
+		this.codigo = codigo;
+		this.titulo = titulo;
+		this.tipoPublicacion = tipoPublicacion;
+		this.editor = editor;
+		this.tema = tema;
+		this.subtema = subtema;
+		this.sePublico = sePublico;
+		this.periodicidad = periodicidad;
+		this.idioma = idioma;
+		this.paisOrigen = paisOrigen;
+	}
+}

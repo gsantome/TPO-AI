@@ -1,0 +1,11 @@
+package com.ai.models;
+
+import java.util.Date;
+
+public class Edicion {
+	private int codigo;
+	private String tituloDeTapa;
+	private float precio;
+	private Date fechaSalida;
+	private int cantidadEjemplares;
+}

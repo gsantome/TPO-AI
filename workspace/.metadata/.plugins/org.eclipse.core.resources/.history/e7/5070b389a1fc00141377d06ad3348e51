@@ -16,6 +16,7 @@ public class Publicacion {
 	private String paisOrigen;
 	
 	public Publicacion() {
+		
 	}
 	
 	public Publicacion(int codigo, String titulo, String tipoPublicacion, String editor, String tema, String subtema, Boolean sePublico, String periodicidad, String idioma, String paisOrigen) {
