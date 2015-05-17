@@ -10,6 +10,7 @@ public class Edicion {
 	private int cantidadEjemplares;
 	
 	public Edicion() {
+		
 	}
 	
 	public Edicion(int codigo, String tituloDeTapa, float precio, Date fechaSalida, int cantidadEjemplares) {
