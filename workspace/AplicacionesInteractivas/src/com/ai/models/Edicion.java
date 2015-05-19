@@ -5,14 +5,14 @@ import java.util.Date;
 public class Edicion {
 	private int codigo;
 	private String tituloDeTapa;
-	private float precio;
+	private double precio;
 	private Date fechaSalida;
 	private int cantidadEjemplares;
 	
 	public Edicion() {
 	}
 	
-	public Edicion(int codigo, String tituloDeTapa, float precio, Date fechaSalida, int cantidadEjemplares) {
+	public Edicion(int codigo, String tituloDeTapa, double precio, Date fechaSalida, int cantidadEjemplares) {
 		this.codigo = codigo;
 		this.tituloDeTapa = tituloDeTapa;
 		this.precio = precio;
@@ -36,7 +36,7 @@ public class Edicion {
 		this.tituloDeTapa = tituloDeTapa;
 	}
 
-	public float getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
 
@@ -60,5 +60,8 @@ public class Edicion {
 		this.cantidadEjemplares = cantidadEjemplares;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return this.codigo + ": " + this.tituloDeTapa;
+	}
 }
