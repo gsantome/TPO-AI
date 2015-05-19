@@ -1,32 +1,14 @@
 package com.ai;
 
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JButton;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-import javax.swing.JDesktopPane;
-import javax.swing.BoxLayout;
-import javax.swing.JSplitPane;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
-import java.awt.Panel;
-import java.awt.Button;
-import java.awt.FlowLayout;
-
-import javax.swing.JToolBar;
-import javax.swing.JSeparator;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
-import com.ai.ui.Colocacion;
+import com.ai.business.Colocacion;
+import com.ai.ui.Colocaciones;
 import com.ai.ui.Ediciones;
 
 public class Main {
@@ -79,7 +61,7 @@ public class Main {
 		JButton btnAbmColocaciones = new JButton("ABM Colocaciones");
 		btnAbmColocaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Colocacion colocacionFrame = new Colocacion();
+				Colocaciones colocacionFrame = new Colocaciones();
 				colocacionFrame.pack();
 				colocacionFrame.setVisible(true);
 			}

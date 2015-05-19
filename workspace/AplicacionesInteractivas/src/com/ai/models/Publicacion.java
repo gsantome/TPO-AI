@@ -16,6 +16,7 @@ public class Publicacion {
 	private String paisOrigen;
 	
 	public Publicacion() {
+		this.ediciones = new Vector<Edicion>();
 	}
 	
 	public Publicacion(int codigo, String titulo, String tipoPublicacion, String editor, String tema, String subtema, Boolean sePublico, String periodicidad, String idioma, String paisOrigen) {
@@ -29,6 +30,12 @@ public class Publicacion {
 		this.periodicidad = periodicidad;
 		this.idioma = idioma;
 		this.paisOrigen = paisOrigen;
+		
+		this.ediciones = new Vector<Edicion>();
+	}
+	
+	public void addEdicion(Edicion edicion) {
+		this.ediciones.addElement(edicion);
 	}
 
 	public Vector<Edicion> getEdiciones() {
@@ -119,5 +126,8 @@ public class Publicacion {
 		this.paisOrigen = paisOrigen;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return this.codigo + ": " + this.titulo + " - " + this.tema;
+	}
 }
