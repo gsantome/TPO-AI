@@ -41,4 +41,52 @@ public class Sistema {
 		return publicaciones;
 
 	}
+	
+	public Vector<Edicion> getEdiciones(){
+		Calendar calendar = Calendar.getInstance();         
+		calendar.add(Calendar.MONTH, 1);
+		calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+		
+		Vector<Edicion> ediciones = new Vector<Edicion>();
+		ediciones.add(new Edicion(1, "Cristina y sus negocios", 10.0, new Date(), 100));
+		ediciones.add(new Edicion(1, "La inflacion", 2.0, calendar.getTime(), 150));
+		
+		return ediciones;
+	}
+	
+	public void altaEdicion(String tituloDeTapa, double precio, Date fechaSalida, int cantidadEjemplares)
+	{
+		try
+		{
+			Edicion nueva = new Edicion(0, tituloDeTapa, precio, fechaSalida, cantidadEjemplares);
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public void bajaEdicion(int codigo)
+	{
+		try
+		{
+			
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
+	public void modificacionEdicion(int codigo, String tituloDeTapa, double precio, Date fechaSalida, int cantidadEjemplares)
+	{
+		try
+		{
+			
+		}
+		catch(Exception ex)
+		{
+			
+		}
+	}
 }
