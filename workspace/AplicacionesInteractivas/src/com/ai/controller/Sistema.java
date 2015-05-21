@@ -54,11 +54,11 @@ public class Sistema {
 		return ediciones;
 	}
 	
-	public void altaEdicion(String tituloDeTapa, double precio, Date fechaSalida, int cantidadEjemplares)
+	public void altaEdicion(Edicion edicion)
 	{
 		try
 		{
-			Edicion nueva = new Edicion(0, tituloDeTapa, precio, fechaSalida, cantidadEjemplares);
+			
 		}
 		catch(Exception ex)
 		{
@@ -78,7 +78,7 @@ public class Sistema {
 		}
 	}
 	
-	public void modificacionEdicion(int codigo, String tituloDeTapa, double precio, Date fechaSalida, int cantidadEjemplares)
+	public void modificacionEdicion(Edicion edicion)
 	{
 		try
 		{
