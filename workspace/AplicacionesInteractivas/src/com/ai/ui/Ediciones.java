@@ -93,11 +93,12 @@ public class Ediciones extends JFrame {
 				if(table.getSelectedRow() != -1)
 				{
 					lblError.setText("");
-					final DefaultTableModel model = (DefaultTableModel)table.getModel();
-					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 0).toString());
-					textFieldPrecio.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
-					textFieldNEjemplares.setText(model.getValueAt(table.getSelectedRow(), 2).toString());
-					textFieldFecha.setText(model.getValueAt(table.getSelectedRow(), 3).toString());
+
+					DefaultTableModel model = (DefaultTableModel)table.getModel();
+					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
+					textFieldPrecio.setText(model.getValueAt(table.getSelectedRow(), 2).toString());
+					textFieldNEjemplares.setText(model.getValueAt(table.getSelectedRow(), 3).toString());
+					textFieldFecha.setText(model.getValueAt(table.getSelectedRow(), 4).toString());
 				}
 			}
 		});
@@ -105,10 +106,9 @@ public class Ediciones extends JFrame {
 		table.setBounds(15, 120, 702, 300);
 		contentPane.add(table);
 		
-		final DefaultTableModel model = new DefaultTableModel(0,0) {
-			private static final long serialVersionUID = 1L;
+		DefaultTableModel model = new DefaultTableModel(0,0) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Float.class, Integer.class, String.class
+				Integer.class, Object.class, Float.class, Integer.class, String.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -120,7 +120,7 @@ public class Ediciones extends JFrame {
 		    }
 		};
 		
-		model.setColumnIdentifiers(new String[] { "Titulo", "Ejemplares", "Precio", "Fecha salida" });
+		model.setColumnIdentifiers(new String[] { "Codigo", "Titulo", "Ejemplares", "Precio", "Fecha salida" });
 		table.setModel(model);
 		
 		comboBoxPublicaciones = new JComboBox<Publicacion>();
@@ -206,11 +206,34 @@ public class Ediciones extends JFrame {
 		btnAgregar.setBounds(631, 62, 86, 23);
 		btnAgregar.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent ae) {
-	            	lblError.setText("");
-	            	//SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
-	            	
-					//Date d = formatter.parse(textFieldFecha.getText());
-					model.addRow(new Object[] { textFieldTitulo.getText(), Float.parseFloat(textFieldPrecio.getText()), Integer.decode(textFieldNEjemplares.getText()), new Date()});
+	            	try
+	            	{
+		            	lblError.setText("");
+		            	
+		            	//SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
+						//Date d = formatter.parse(textFieldFecha.getText());
+		            	Edicion edicion = new Edicion (
+		            			0,
+		            			textFieldTitulo.getText(),
+		            			Float.parseFloat(textFieldPrecio.getText()),
+		            			new Date(),
+		            			Integer.decode(textFieldNEjemplares.getText())
+		            			);
+						
+						Sistema.getInstance().altaEdicion(edicion);
+						
+						model.addRow(new Object[] {
+								edicion.getCodigo(),
+								edicion.getTituloDeTapa(),
+								edicion.getPrecio(),
+								edicion.getCantidadEjemplares(),
+								edicion.getFechaSalida()
+								});
+	            	}
+	            	catch(Exception ex)
+	            	{
+	            		ex.printStackTrace();
+	            	}
 	            }
 		});
 		contentPane.add(btnAgregar);
@@ -229,12 +252,21 @@ public class Ediciones extends JFrame {
 					else
 					{
 						//DefaultTableModel model = (DefaultTableModel)table.getModel();
-						model.setValueAt(textFieldTitulo.getText(), table.getSelectedRow(), 0);
-						model.setValueAt(Float.parseFloat(textFieldPrecio.getText()), table.getSelectedRow(), 1);
-						model.setValueAt(Integer.decode(textFieldNEjemplares.getText()), table.getSelectedRow(), 2);
-						model.setValueAt(textFieldFecha.getText(), table.getSelectedRow(), 3);
+						model.setValueAt(textFieldTitulo.getText(), table.getSelectedRow(), 1);
+						model.setValueAt(Float.parseFloat(textFieldPrecio.getText()), table.getSelectedRow(), 2);
+						model.setValueAt(Integer.decode(textFieldNEjemplares.getText()), table.getSelectedRow(), 3);
+						model.setValueAt(textFieldFecha.getText(), table.getSelectedRow(), 4);
 						
 						//Llamar Modificacion
+						Edicion edicion = new Edicion (
+		            			Integer.decode(model.getValueAt(table.getSelectedRow(), 0).toString()),
+		            			textFieldTitulo.getText(),
+		            			Float.parseFloat(textFieldPrecio.getText()),
+		            			new Date(),
+		            			Integer.decode(textFieldNEjemplares.getText())
+		            			);
+						
+						Sistema.getInstance().modificacionEdicion(edicion);
 					}
 				}
 				catch(Exception ex)
@@ -258,9 +290,10 @@ public class Ediciones extends JFrame {
 					}
 					else
 					{
-						//DefaultTableModel model = (DefaultTableModel)table.getModel();
 						//Llamar BAJA
-						//model.getValueAt(table.getSelectedRow(), 0);
+						DefaultTableModel model = (DefaultTableModel)table.getModel();
+						Sistema.getInstance().bajaEdicion(Integer.decode(model.getValueAt(table.getSelectedRow(), 0).toString()));
+						
 						model.removeRow(table.getSelectedRow());
 					}
 				}
@@ -299,7 +332,7 @@ public class Ediciones extends JFrame {
 			ediciones = Sistema.getInstance().getEdiciones();
 			
 			for (Edicion edicion : ediciones) {
-				model.addRow(new Object[] { edicion.getTituloDeTapa(), edicion.getPrecio(), edicion.getCantidadEjemplares(), edicion.getFechaSalida()});
+				model.addRow(new Object[] { edicion.getCodigo(), edicion.getTituloDeTapa(), edicion.getPrecio(), edicion.getCantidadEjemplares(), edicion.getFechaSalida()});
 			}
 		}
 		catch(Exception ex)
