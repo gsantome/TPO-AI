@@ -106,7 +106,7 @@ public class Ediciones extends JFrame {
 		table.setBounds(15, 120, 702, 300);
 		contentPane.add(table);
 		
-		DefaultTableModel model = new DefaultTableModel(0,0) {
+		final DefaultTableModel model = new DefaultTableModel(0,0) {
 			Class[] columnTypes = new Class[] {
 				Integer.class, Object.class, Float.class, Integer.class, String.class
 			};

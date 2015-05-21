@@ -21,4 +21,9 @@ public class Colocacion {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public int getIdEdicion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
