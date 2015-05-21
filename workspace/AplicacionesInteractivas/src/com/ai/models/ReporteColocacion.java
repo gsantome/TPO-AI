@@ -6,7 +6,6 @@ public class ReporteColocacion {
 	private static ReporteColocacion reportador;
 	
 	public ReporteColocacion(){
-		this.getInstance();
 	}
 	
 	public static ReporteColocacion getInstance(){

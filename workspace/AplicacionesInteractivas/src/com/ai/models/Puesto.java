@@ -3,8 +3,21 @@ package com.ai.models;
 public class Puesto {
 	private int codigo;
 	private String direccion;
+	private String barrio;
 	private int idZona;
 	private String tipoPublicacion;
+	
+	public Puesto() {
+		
+	}
+	
+	public Puesto(int codigo, String direccion, String barrio, int idZona, String tipoPublicacion) {
+		this.codigo = codigo;
+		this.direccion = direccion;
+		this.barrio = barrio;
+		this.idZona = idZona;
+		this.tipoPublicacion = tipoPublicacion;
+	}
 	
 	public int getCodigo() {
 		return codigo;

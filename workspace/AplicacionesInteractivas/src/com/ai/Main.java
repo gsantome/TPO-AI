@@ -3,11 +3,13 @@ package com.ai;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import com.ai.business.Colocacion;
+import com.ai.db.PersistenciaPuestos;
 import com.ai.ui.Colocaciones;
 import com.ai.ui.Ediciones;
 
@@ -36,6 +38,11 @@ public class Main {
 	 */
 	public Main() {
 		initialize();
+		
+		Vector<Object> listPuestos = PersistenciaPuestos.getInstance().selectAll();
+		
+		
+		
 	}
 
 	/**
