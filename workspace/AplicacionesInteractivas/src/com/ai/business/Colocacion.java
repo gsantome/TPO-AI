@@ -9,5 +9,7 @@ public class Colocacion {
 	public void setCantEjemplares(int CantEjemplares){
 		this.CantEjemplares = CantEjemplares;
 	}
-
+	public int getCantEjemplares() {
+		return CantEjemplares;
+	}
 }
