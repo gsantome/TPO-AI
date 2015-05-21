@@ -4,15 +4,9 @@ import java.util.ArrayList;
 
 import com.ai.business.Colocacion;
 
-/*
- * Tabla de exceso
+/*Ejecuta sobre la colocacion por defecto calculada
+ * Tabla de exceso en base de datos
  *  porcentaje excedido/porcentaje de descuento
- * 
- * 
- * 
- * 
- * 
- * 
  */
 public class PautaXExcesoDevolucion extends Pauta {
 
@@ -29,7 +23,7 @@ public class PautaXExcesoDevolucion extends Pauta {
 			ItemColocacion colocacionAnterior = ReporteColocacion.getInstance().getUltimaColocacion(idpuesto, colocacionActual.g.getIdEdicion());
 			int diferencia = colocacionAnterior.getCantidadDevoluciones()-colocacionAnterior.getCantidadEjemplares();
 			if (diferencia>0) {		
-				int descuento = PersistenciaPautas.getInstance().selectTableExceso(diferencia); //
+				int descuento = PersistenciaPautas.getInstance().selectTableExceso(diferencia); //pendiente de implementacion
 				itemColActual.setCantidadEjemplares(itemColActual.getCantidadEjemplares()-descuento);
 				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares()-descuento);
 			}
