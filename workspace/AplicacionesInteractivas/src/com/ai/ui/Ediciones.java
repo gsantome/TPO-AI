@@ -24,6 +24,13 @@ import com.ai.models.Publicacion;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Component;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Ediciones extends JFrame {
 
@@ -39,6 +46,7 @@ public class Ediciones extends JFrame {
 	private JLabel lblPrecio;
 	private JLabel lblNEjemplares;
 	private JLabel lblFechaDeSalida;
+	private JLabel lblError;
 	
 	private Vector<Publicacion> publicaciones;
 	private Vector<Edicion> ediciones;
@@ -65,25 +73,51 @@ public class Ediciones extends JFrame {
 	 */
 	public Ediciones() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 748, 733);
+		setBounds(100, 100, 748, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
+		
+		lblError = new JLabel("");
+		lblError.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblError.setForeground(Color.RED);
+		lblError.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		lblError.setBounds(15, 96, 702, 14);
+		contentPane.add(lblError);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(table.getSelectedRow() != -1)
+				{
+					lblError.setText("");
+					DefaultTableModel model = (DefaultTableModel)table.getModel();
+					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 0).toString());
+					textFieldPrecio.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
+					textFieldNEjemplares.setText(model.getValueAt(table.getSelectedRow(), 2).toString());
+					textFieldFecha.setText(model.getValueAt(table.getSelectedRow(), 3).toString());
+				}
+			}
+		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setBounds(15, 108, 702, 553);
+		table.setBounds(15, 120, 702, 300);
 		contentPane.add(table);
 		
 		DefaultTableModel model = new DefaultTableModel(0,0) {
 			private static final long serialVersionUID = 1L;
 			Class[] columnTypes = new Class[] {
-				Object.class, Integer.class, Float.class, String.class
+				Object.class, Float.class, Integer.class, String.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
-			}
+			};
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
 		};
 		
 		model.setColumnIdentifiers(new String[] { "Titulo", "Ejemplares", "Precio", "Fecha salida" });
@@ -99,11 +133,46 @@ public class Ediciones extends JFrame {
 		textFieldTitulo.setColumns(10);
 		
 		textFieldPrecio = new JTextField();
+		textFieldPrecio.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int c = (int)e.getKeyChar();
+				if(c >= 46 && c <= 57)
+				{
+					if(c == 46)
+					{
+						if(textFieldPrecio.getText().contains("."))
+							e.setKeyChar((char)KeyEvent.VK_CLEAR);
+						else if(textFieldPrecio.getText().length() == 0)
+							textFieldPrecio.setText("0");
+					}
+					if(c == 47)
+						e.setKeyChar((char)KeyEvent.VK_CLEAR);
+				}
+				else
+				{
+					e.setKeyChar((char)KeyEvent.VK_CLEAR);
+					e.consume();
+				}
+			}
+		});
 		textFieldPrecio.setBounds(439, 31, 86, 20);
 		contentPane.add(textFieldPrecio);
 		textFieldPrecio.setColumns(10);
 		
 		textFieldNEjemplares = new JTextField();
+		textFieldNEjemplares.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				int c = (int)e.getKeyChar();
+				if(c < 48 || c > 57)
+				{
+					e.setKeyChar((char)KeyEvent.VK_CLEAR);
+					e.consume();
+				}
+				int vv = Integer.MAX_VALUE;
+			}
+		});
 		textFieldNEjemplares.setBounds(535, 31, 86, 20);
 		contentPane.add(textFieldNEjemplares);
 		textFieldNEjemplares.setColumns(10);
@@ -137,59 +206,105 @@ public class Ediciones extends JFrame {
 		btnAgregar.setBounds(631, 62, 86, 23);
 		btnAgregar.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent ae) {
+	            	lblError.setText("");
 	            	//SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
 	            	
 					//Date d = formatter.parse(textFieldFecha.getText());
-					model.addRow(new Object[] { textFieldTitulo.getText(), Integer.decode(textFieldPrecio.getText()), Integer.decode(textFieldNEjemplares.getText()), new Date()});
+					model.addRow(new Object[] { textFieldTitulo.getText(), Float.parseFloat(textFieldPrecio.getText()), Integer.decode(textFieldNEjemplares.getText()), new Date()});
 	            }
 		});
 		contentPane.add(btnAgregar);
+		
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.setBounds(535, 62, 89, 23);
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				try
+				{
+					lblError.setText("");
+					if(table.getSelectedRow() == -1)
+					{
+						lblError.setText("Debe seleccionar una Edición");
+					}
+					else
+					{
+						//DefaultTableModel model = (DefaultTableModel)table.getModel();
+						model.setValueAt(textFieldTitulo.getText(), table.getSelectedRow(), 0);
+						model.setValueAt(Float.parseFloat(textFieldPrecio.getText()), table.getSelectedRow(), 1);
+						model.setValueAt(Integer.decode(textFieldNEjemplares.getText()), table.getSelectedRow(), 2);
+						model.setValueAt(textFieldFecha.getText(), table.getSelectedRow(), 3);
+						
+						//Llamar Modificacion
+					}
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
+		contentPane.add(btnEditar);
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(436, 62, 89, 23);
+		btnEliminar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				try
+				{
+					lblError.setText("");
+					if(table.getSelectedRow() == -1)
+					{
+						lblError.setText("Debe seleccionar una Edición");
+					}
+					else
+					{
+						//DefaultTableModel model = (DefaultTableModel)table.getModel();
+						//Llamar BAJA
+						//model.getValueAt(table.getSelectedRow(), 0);
+						model.removeRow(table.getSelectedRow());
+					}
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
+		contentPane.add(btnEliminar);
 		
 		loadPublicaciones();
 		loadEdiciones(model);
 	}
 	
 	private void loadPublicaciones() {
-		
-		publicaciones = Sistema.getInstance().getPublicaciones();
-		
-		for (Publicacion publicacion : publicaciones) {
-			comboBoxPublicaciones.addItem(publicacion);
+		try
+		{
+			publicaciones = Sistema.getInstance().getPublicaciones();
+			
+			for (Publicacion publicacion : publicaciones) {
+				comboBoxPublicaciones.addItem(publicacion);
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
 		}
 		
 	}
 	
 	private void loadEdiciones(DefaultTableModel model)
 	{
-		ediciones = Sistema.getInstance().getEdiciones();
-		/*int cantEdiciones = ediciones.size();
-		
-		Object [][] data = new Object[cantEdiciones][4];
-		
-		for (int i = 0; i < cantEdiciones; i++) {
-			data[i][0] = ediciones.elementAt(i).getTituloDeTapa();
-			data[i][1] = ediciones.elementAt(i).getCantidadEjemplares();
-			data[i][2] = ediciones.elementAt(i).getPrecio();
-			data[i][3] = ediciones.elementAt(i).getFechaSalida();
-		}*/
-		
-		for (Edicion edicion : ediciones) {
-			model.addRow(new Object[] { edicion.getTituloDeTapa(), edicion.getCantidadEjemplares(), edicion.getPrecio(), edicion.getFechaSalida()});
+		try
+		{
+			ediciones = Sistema.getInstance().getEdiciones();
+			
+			for (Edicion edicion : ediciones) {
+				model.addRow(new Object[] { edicion.getTituloDeTapa(), edicion.getPrecio(), edicion.getCantidadEjemplares(), edicion.getFechaSalida()});
+			}
 		}
-		
-		/*table.setModel(new DefaultTableModel(
-				null,
-				new String[] {
-					"Titulo", "Ejemplares", "Precio", "Fecha salida"
-				}
-			) {
-				private static final long serialVersionUID = 1L;
-				Class[] columnTypes = new Class[] {
-					Object.class, Integer.class, Float.class, String.class
-				};
-				public Class getColumnClass(int columnIndex) {
-					return columnTypes[columnIndex];
-				}
-			});*/
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 }
