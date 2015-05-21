@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 public class PautaXDefecto implements IPauta {
 
-	@Override
 	public ArrayList<ItemColocacion> procesarColocaciones(
 			ArrayList<Puesto> puestos, int totalEjemplares) {
 		int ejemplaresNecesarios = 0;
