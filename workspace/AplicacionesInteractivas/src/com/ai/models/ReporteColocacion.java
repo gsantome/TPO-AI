@@ -20,5 +20,9 @@ public class ReporteColocacion {
 		// debe devolver la lista del mas nuevo al mas viejo. Solo los ultimos 3 dias
 		return null;
 	}
+	public ItemColocacion getUltimaColocacion(int IdPuesto,int CodigoEdicion) {
+		// devolver ultima colocacion de una edicion particular para un puesto particular
+		return null;
+	}
 
 }
