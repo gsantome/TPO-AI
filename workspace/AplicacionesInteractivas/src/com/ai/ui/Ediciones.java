@@ -93,11 +93,19 @@ public class Ediciones extends JFrame {
 				if(table.getSelectedRow() != -1)
 				{
 					lblError.setText("");
+<<<<<<< HEAD
 					DefaultTableModel model = (DefaultTableModel)table.getModel();
 					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
 					textFieldPrecio.setText(model.getValueAt(table.getSelectedRow(), 2).toString());
 					textFieldNEjemplares.setText(model.getValueAt(table.getSelectedRow(), 3).toString());
 					textFieldFecha.setText(model.getValueAt(table.getSelectedRow(), 4).toString());
+=======
+					final DefaultTableModel model = (DefaultTableModel)table.getModel();
+					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 0).toString());
+					textFieldPrecio.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
+					textFieldNEjemplares.setText(model.getValueAt(table.getSelectedRow(), 2).toString());
+					textFieldFecha.setText(model.getValueAt(table.getSelectedRow(), 3).toString());
+>>>>>>> origin/master
 				}
 			}
 		});
@@ -105,7 +113,12 @@ public class Ediciones extends JFrame {
 		table.setBounds(15, 120, 702, 300);
 		contentPane.add(table);
 		
+<<<<<<< HEAD
 		DefaultTableModel model = new DefaultTableModel(0,0) {
+=======
+		final DefaultTableModel model = new DefaultTableModel(0,0) {
+			private static final long serialVersionUID = 1L;
+>>>>>>> origin/master
 			Class[] columnTypes = new Class[] {
 				Integer.class, Object.class, Float.class, Integer.class, String.class
 			};
@@ -246,7 +259,7 @@ public class Ediciones extends JFrame {
 					lblError.setText("");
 					if(table.getSelectedRow() == -1)
 					{
-						lblError.setText("Debe seleccionar una Edición");
+						lblError.setText("Debe seleccionar una Ediciï¿½n");
 					}
 					else
 					{
@@ -285,7 +298,7 @@ public class Ediciones extends JFrame {
 					lblError.setText("");
 					if(table.getSelectedRow() == -1)
 					{
-						lblError.setText("Debe seleccionar una Edición");
+						lblError.setText("Debe seleccionar una Ediciï¿½n");
 					}
 					else
 					{

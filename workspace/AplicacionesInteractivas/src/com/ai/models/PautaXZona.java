@@ -6,7 +6,6 @@ import java.util.Iterator;
 public class PautaXZona implements IPauta{
 	private int codigoZona;
 
-	@Override
 	public ArrayList<ItemColocacion> procesarColocaciones(
 			ArrayList<Puesto> puestos, int totalEjemplares) {
 		// TODO Auto-generated method stub

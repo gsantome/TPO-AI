@@ -1,5 +1,7 @@
 package com.ai.models;
 
+import java.util.ArrayList;
+
 public class Puesto {
 	private int codigo;
 	private String direccion;
@@ -42,6 +44,10 @@ public class Puesto {
 	}
 	public void setTipoPublicacion(String tipoPublicacion) {
 		this.tipoPublicacion = tipoPublicacion;
+	}
+	
+	public ArrayList<ItemColocacion> getUltimasColocaciones(int cantidad){
+		return null;
 	}
 
 	

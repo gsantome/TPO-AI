@@ -77,7 +77,7 @@ public class Colocaciones extends JFrame {
 		comboBoxEdiciones.setBounds(151, 47, 202, 20);
 		contentPane.add(comboBoxEdiciones);
 		
-		JFrame self = this;
+		final JFrame self = this;
 		
 		JButton btnContinuar = new JButton("Continuar");
 		btnContinuar.addActionListener(new ActionListener() {
