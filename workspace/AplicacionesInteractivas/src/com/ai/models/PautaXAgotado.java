@@ -94,11 +94,11 @@ public class PautaXAgotado extends Pauta{
 		
 		
 		for (Puesto puesto : puestos) {
-			ArrayList<ItemColocacion> historial = ReporteColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), this.cantUltimasEdiciones);
+			ArrayList<ItemColocacion> historial = ReporteColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), idPublicacion, this.cantUltimasEdiciones);
 			
 			boolean cumpleAgotados = true;
 			
-			for (int i = 0; i < totalEjemplares; i++){			//Recorr las N ediciones anteriores y chequeo que haya agotado
+			for (int i = 0; i < cantUltimasEdiciones; i++){			//Recorr las N ediciones anteriores y chequeo que haya agotado
 				ItemColocacion historico = historial.get(i);
 				if (historico.getCantidadDevoluciones() > 0){
 					cumpleAgotados = false;

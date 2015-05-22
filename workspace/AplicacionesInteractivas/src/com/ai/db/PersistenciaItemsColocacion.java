@@ -93,6 +93,7 @@ public class PersistenciaItemsColocacion extends Persistencia {
 	public ItemColocacion getUltimaColocacion(int idPuesto, int idEdicion) {
 		// devolver ultima colocacion de una edicion particular para un puesto particular
 		
+		
 		return null;
 	}
 
