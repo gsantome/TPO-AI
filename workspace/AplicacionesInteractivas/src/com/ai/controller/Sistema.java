@@ -62,10 +62,9 @@ public class Sistema {
 		
 		PersistenciaEdiciones persistencia = PersistenciaEdiciones.getInstance();
 		
-		Vector<Object> vector = persistencia.selectByPublicacion(idPublicacion);
-		Vector typelessVector = vector;
+		Vector<Edicion> ediciones = persistencia.selectByPublicacion(idPublicacion);
 		
-		return (Vector<Edicion>)typelessVector;
+		return ediciones;
 	}
 	
 	public Vector<Edicion> getEdiciones() {
@@ -76,39 +75,23 @@ public class Sistema {
 		return (Vector<Edicion>)typelessVector;
 	}
 	
-	public void altaEdicion(Edicion edicion)
+	public void altaEdicion(Edicion edicion, int codigoPublicacion)
 	{
-		try
-		{
-			
-		}
-		catch(Exception ex)
-		{
-			
-		}
+		
+		PersistenciaEdiciones.getInstance().insert(edicion, codigoPublicacion);
 	}
 	
 	public void bajaEdicion(int codigo)
 	{
-		try
-		{
-			
-		}
-		catch(Exception ex)
-		{
-			
-		}
+		PersistenciaEdiciones.getInstance().delete(codigo);
 	}
 	
 	public void modificacionEdicion(Edicion edicion)
 	{
-		try
-		{
-			
-		}
-		catch(Exception ex)
-		{
-			
-		}
+		PersistenciaEdiciones.getInstance().update(edicion);
+	}
+
+	public Vector<Edicion> getEdicionesByPublicacion(int codigo) {
+		return PersistenciaEdiciones.getInstance().selectByPublicacion(codigo);
 	}
 }
