@@ -38,6 +38,7 @@ public class NuevaColocaciones extends JFrame {
 	private JButton btnContinuar;
 	private JTextField txtCondicional;
 	
+	private Colocacion colocacion;
 	private DefaultTableModel model;
 	private int cantidadEjemplares;
 	private int idPublicacion;
@@ -49,10 +50,11 @@ public class NuevaColocaciones extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public NuevaColocaciones(int idPublicacion, int idEdicion, int cantidadEjemplares) {
+	public NuevaColocaciones(int idPublicacion, int idEdicion, int cantidadEjemplares, Colocacion colocacion) {
 		this.cantidadEjemplares = cantidadEjemplares;
 		this.idPublicacion = idPublicacion;
 		this.idEdicion = idEdicion;
+		this.colocacion = colocacion;
 		
 		model = new DefaultTableModel();
 		
@@ -138,13 +140,19 @@ public class NuevaColocaciones extends JFrame {
 		contentPane.add(btnBuscar);
 		
 		hideCondicional();
-//		loadDataByPauta();
 	}
 	
 	private void crearColocacion() {
+		//Chequeo si necesito mas ejemplares
+		if( (this.cantidadEjemplares - pauta.getEjemplaresNecesarios()) < 0 ) {
+			colocacion.notifyObservers(this.cantidadEjemplares - pauta.getEjemplaresNecesarios());
+		}
+		
 		TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
 		
-		Colocacion colocacion = new Colocacion(idEdicion, selectedPauta.toString(), new Date());
+		colocacion.setIdEdicion(idEdicion);
+		colocacion.setPauta(selectedPauta.toString());
+		colocacion.setFecha(new Date());
 		
 		for (ItemColocacion itemColocacion : colocaciones) {
 			itemColocacion.setIdPublicacion(idPublicacion);
@@ -155,12 +163,9 @@ public class NuevaColocaciones extends JFrame {
 		
 		Sistema.getInstance().guardarColocacion(colocacion);
 		
-		//chequeo si la cantidad de ejemplares esta bien o necesito notificar para que manden mas
-		if( pauta.getEjemplaresNecesarios() > 0 ) {
-			//notifico a los observers
-		}
-		
 		JOptionPane.showMessageDialog(null, "Se ha generado la nueva colocacion.");
+		
+		colocacion.removeObservers();
 		
 		this.dispose();
 	}
