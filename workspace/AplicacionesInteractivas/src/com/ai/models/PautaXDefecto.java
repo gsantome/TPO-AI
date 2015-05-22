@@ -3,6 +3,8 @@ package com.ai.models;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.ai.db.PersistenciaItemsColocacion;
+
 public class PautaXDefecto implements IPauta {
 
 	public ArrayList<ItemColocacion> procesarColocaciones(
@@ -16,7 +18,7 @@ public class PautaXDefecto implements IPauta {
 		while (iterator.hasNext()){
 			
 			currentPuesto = iterator.next();
-			historial = ReporteColocacion.getInstance().getLastThreeDayItems(currentPuesto.getCodigo());
+			historial = new ArrayList<ItemColocacion>(PersistenciaItemsColocacion.getInstance().getLastThreeDayItems(currentPuesto.getCodigo()));
 			colocacion = new ItemColocacion(currentPuesto.getCodigo(), calcularEjemplares(historial), 0);
 			colocacionZona.add(colocacion);
 			ejemplaresNecesarios += colocacion.getCantidadEjemplares();
