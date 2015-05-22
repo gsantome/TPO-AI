@@ -30,16 +30,78 @@ public class PersistenciaEdiciones extends Persistencia {
 		
 	}
 
+	public void insert(Object obj, Object obj2)
+	{
+		try {
+			Edicion edicion = (Edicion)obj;
+			int codigoPublicacion = (int)obj;
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.Ediciones values (?,?,?,?,?)");
+			
+			statement.setInt(1, edicion.getCodigo());
+			statement.setInt(2, codigoPublicacion);
+			statement.setString(3, edicion.getTituloDeTapa());
+			statement.setDouble(4, edicion.getPrecio());
+			statement.setDate(5, new java.sql.Date(edicion.getFechaSalida().getTime()));
+			statement.setInt(6, edicion.getCantidadEjemplares());
+			
+			statement.execute();
+			
+			PoolConnection.getPoolConnection().releaseConnection(conn);
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		}
+	}
+
 	@Override
 	public void update(Object obj) {
-		// TODO Auto-generated method stub
-
+		try {
+			Edicion edicion = (Edicion)obj;
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("update AplicacionesInteractivas.dbo.Ediciones" +
+												"set tituloTapa = ?" +
+												"set precio = ?" +
+												"set cantidadEjemplares = ?" +
+												"set fechaSalida = ?" +
+												"where idEdicion = ?");
+			
+			statement.setString(1, edicion.getTituloDeTapa());
+			statement.setDouble(2, edicion.getPrecio());
+			statement.setInt(3, edicion.getCantidadEjemplares());
+			statement.setDate(4, new java.sql.Date(edicion.getFechaSalida().getTime()));
+			statement.setInt(5, edicion.getCodigo());
+			
+			statement.execute();
+			PoolConnection.getPoolConnection().releaseConnection(conn);
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		}
 	}
 
 	@Override
 	public void delete(Object obj) {
-		// TODO Auto-generated method stub
-
+		try {
+			int codigo = (int)obj;
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("delete from AplicacionesInteractivas.dbo.Ediciones" +
+												"where idEdicion = ?");
+			statement.setInt(1,codigo);
+			
+			statement.execute();
+			PoolConnection.getPoolConnection().releaseConnection(conn);
+		}
+		catch(Exception ex)
+		{
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		}
 	}
 
 	@Override
@@ -105,9 +167,9 @@ public class PersistenciaEdiciones extends Persistencia {
 		}
 	}
 	
-	public Vector<Object> selectByPublicacion(int idPublicacion) {
+	public Vector<Edicion> selectByPublicacion(int idPublicacion) {
 		try {
-			Vector<Object> list = new Vector<Object>();
+			Vector<Edicion> list = new Vector<Edicion>();
 			
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement statement = conn.prepareStatement("select * from AplicacionesInteractivas.dbo.Ediciones where idPublicacion = ?");

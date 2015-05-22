@@ -1,36 +1,34 @@
 package com.ai.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.ai.controller.Sistema;
 import com.ai.models.Edicion;
 import com.ai.models.Publicacion;
-
-import javax.swing.JLabel;
-import javax.swing.ListSelectionModel;
-import javax.swing.JButton;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Component;
-import java.awt.Color;
-import javax.swing.SwingConstants;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class Ediciones extends JFrame {
 
@@ -51,13 +49,17 @@ public class Ediciones extends JFrame {
 	private Vector<Publicacion> publicaciones;
 	private Vector<Edicion> ediciones;
 	private JButton btnAgregar;
+	private JButton btnEditar;
+	private JButton btnEliminar;
+	private JButton btnLimpiar;
 
 	/**
 	 * Create the frame.
 	 */
 	public Ediciones() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 748, 480);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 748, 490);
+		setPreferredSize(new Dimension(748, 490));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -67,7 +69,7 @@ public class Ediciones extends JFrame {
 		lblError.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblError.setForeground(Color.RED);
 		lblError.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		lblError.setBounds(15, 96, 702, 14);
+		lblError.setBounds(15, 108, 702, 14);
 		contentPane.add(lblError);
 
 		table = new JTable();
@@ -77,6 +79,7 @@ public class Ediciones extends JFrame {
 				if(table.getSelectedRow() != -1)
 				{
 					lblError.setText("");
+					//comboBoxPublicaciones.disable();
 
 					DefaultTableModel model = (DefaultTableModel)table.getModel();
 					textFieldTitulo.setText(model.getValueAt(table.getSelectedRow(), 1).toString());
@@ -87,10 +90,10 @@ public class Ediciones extends JFrame {
 			}
 		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setBounds(15, 120, 702, 300);
+		table.setBounds(15, 170, 702, 250);
 		contentPane.add(table);
 		
-		final DefaultTableModel model = new DefaultTableModel(0,0) {
+		DefaultTableModel model = new DefaultTableModel(0,0) {
 			Class[] columnTypes = new Class[] {
 				Integer.class, Object.class, Float.class, Integer.class, String.class
 			};
@@ -109,10 +112,15 @@ public class Ediciones extends JFrame {
 		
 		comboBoxPublicaciones = new JComboBox<Publicacion>();
 		comboBoxPublicaciones.setBounds(15, 31, 202, 20);
+		comboBoxPublicaciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loadEdiciones(model);
+			}
+		});
 		contentPane.add(comboBoxPublicaciones);
 		
 		textFieldTitulo = new JTextField();
-		textFieldTitulo.setBounds(227, 31, 202, 20);
+		textFieldTitulo.setBounds(15, 77, 202, 20);
 		contentPane.add(textFieldTitulo);
 		textFieldTitulo.setColumns(10);
 		
@@ -140,7 +148,7 @@ public class Ediciones extends JFrame {
 				}
 			}
 		});
-		textFieldPrecio.setBounds(439, 31, 86, 20);
+		textFieldPrecio.setBounds(227, 77, 86, 20);
 		contentPane.add(textFieldPrecio);
 		textFieldPrecio.setColumns(10);
 		
@@ -154,15 +162,15 @@ public class Ediciones extends JFrame {
 					e.setKeyChar((char)KeyEvent.VK_CLEAR);
 					e.consume();
 				}
-				int vv = Integer.MAX_VALUE;
 			}
 		});
-		textFieldNEjemplares.setBounds(535, 31, 86, 20);
+		
+		textFieldNEjemplares.setBounds(323, 77, 86, 20);
 		contentPane.add(textFieldNEjemplares);
 		textFieldNEjemplares.setColumns(10);
 		
 		textFieldFecha = new JTextField();
-		textFieldFecha.setBounds(631, 31, 86, 20);
+		textFieldFecha.setBounds(419, 77, 86, 20);
 		contentPane.add(textFieldFecha);
 		textFieldFecha.setColumns(10);
 		
@@ -171,48 +179,53 @@ public class Ediciones extends JFrame {
 		contentPane.add(lblPublicacion);
 		
 		lblTitulo = new JLabel("Titulo");
-		lblTitulo.setBounds(227, 16, 46, 14);
+		lblTitulo.setBounds(15, 62, 46, 14);
 		contentPane.add(lblTitulo);
 		
 		lblPrecio = new JLabel("Precio");
-		lblPrecio.setBounds(439, 16, 46, 14);
+		lblPrecio.setBounds(227, 62, 46, 14);
 		contentPane.add(lblPrecio);
 		
 		lblNEjemplares = new JLabel("N\u00B0 ejemplares");
-		lblNEjemplares.setBounds(535, 16, 80, 14);
+		lblNEjemplares.setBounds(323, 62, 80, 14);
 		contentPane.add(lblNEjemplares);
 		
 		lblFechaDeSalida = new JLabel("Fecha de salida");
-		lblFechaDeSalida.setBounds(631, 16, 120, 14);
+		lblFechaDeSalida.setBounds(419, 62, 120, 14);
 		contentPane.add(lblFechaDeSalida);
 		
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(631, 62, 86, 23);
+		btnAgregar.setBounds(631, 133, 86, 23);
 		btnAgregar.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent ae) {
 	            	try
 	            	{
 		            	lblError.setText("");
 		            	
-		            	//SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
-						//Date d = formatter.parse(textFieldFecha.getText());
-		            	Edicion edicion = new Edicion (
-		            			0,
-		            			textFieldTitulo.getText(),
-		            			Float.parseFloat(textFieldPrecio.getText()),
-		            			new Date(),
-		            			Integer.decode(textFieldNEjemplares.getText())
-		            			);
-						
-						Sistema.getInstance().altaEdicion(edicion);
-						
-						model.addRow(new Object[] {
-								edicion.getCodigo(),
-								edicion.getTituloDeTapa(),
-								edicion.getPrecio(),
-								edicion.getCantidadEjemplares(),
-								edicion.getFechaSalida()
-								});
+		            	if(!isThisDateValid(textFieldFecha.getText(), "dd/MM/yyyy"))
+		            		lblError.setText("Formato de fecha inválida. Formato correcto dd/MM/yyyy");
+		            	else
+		            	{
+			            	Edicion edicion = new Edicion (
+			            			0,
+			            			textFieldTitulo.getText(),
+			            			Float.parseFloat(textFieldPrecio.getText()),
+			            			new SimpleDateFormat("dd/MM/yyyy").parse(textFieldFecha.getText()),
+			            			Integer.decode(textFieldNEjemplares.getText())
+			            			);
+			            	
+			    			Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+							
+							Sistema.getInstance().altaEdicion(edicion, publicacion.getCodigo());
+							
+							model.addRow(new Object[] {
+									edicion.getCodigo(),
+									edicion.getTituloDeTapa(),
+									edicion.getPrecio(),
+									edicion.getCantidadEjemplares(),
+									edicion.getFechaSalida()
+									});
+		            	}
 	            	}
 	            	catch(Exception ex)
 	            	{
@@ -222,16 +235,33 @@ public class Ediciones extends JFrame {
 		});
 		contentPane.add(btnAgregar);
 		
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setBounds(535, 62, 89, 23);
+		btnEditar = new JButton("Editar");
+		btnEditar.setBounds(532, 133, 89, 23);
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				try
 				{
 					lblError.setText("");
+					
 					if(table.getSelectedRow() == -1)
 					{
-						lblError.setText("Debe seleccionar una Ediciï¿½n");
+						lblError.setText("Debe seleccionar una Edición");
+					}
+					else if(textFieldTitulo.getText().length() == 0)
+					{
+						lblError.setText("El titulo no puede estar vacio");
+					}
+					else if(textFieldPrecio.getText().length() == 0)
+					{
+						lblError.setText("El precio no puede estar vacio");
+					}
+					else if(textFieldNEjemplares.getText().length() == 0)
+					{
+						lblError.setText("La cantidad de ejemplares no puede estar vacio");
+					}
+					else if(!isThisDateValid(textFieldFecha.getText(), "dd/MM/yyyy"))
+					{
+						lblError.setText("Formato de fecha inválida. Formato correcto dd/MM/yyyy");
 					}
 					else
 					{
@@ -261,8 +291,8 @@ public class Ediciones extends JFrame {
 		});
 		contentPane.add(btnEditar);
 		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(436, 62, 89, 23);
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(433, 133, 89, 23);
 		btnEliminar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae) {
 				try
@@ -271,6 +301,18 @@ public class Ediciones extends JFrame {
 					if(table.getSelectedRow() == -1)
 					{
 						lblError.setText("Debe seleccionar una Ediciï¿½n");
+					}
+					else if(textFieldTitulo.getText().length() == 0)
+					{
+						lblError.setText("El titulo no puede estar vacio");
+					}
+					else if(textFieldPrecio.getText().length() == 0)
+					{
+						lblError.setText("El precio no puede estar vacio");
+					}
+					else if(textFieldNEjemplares.getText().length() == 0)
+					{
+						lblError.setText("La cantidad de ejemplares no puede estar vacio");
 					}
 					else
 					{
@@ -289,7 +331,24 @@ public class Ediciones extends JFrame {
 		});
 		contentPane.add(btnEliminar);
 		
+		btnLimpiar = new JButton("Limpiar");
+		btnLimpiar.setBounds(334, 133, 89, 23);
+		btnLimpiar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				table.getSelectionModel().clearSelection();
+				//comboBoxPublicaciones.enable();
+				
+				textFieldTitulo.setText("");
+				textFieldPrecio.setText("");
+				textFieldNEjemplares.setText("");
+				textFieldFecha.setText("");
+				comboBoxPublicaciones.setSelectedIndex(0);
+			}
+		});
+		contentPane.add(btnLimpiar);
+		
 		loadPublicaciones();
+		
 		loadEdiciones(model);
 	}
 	
@@ -313,7 +372,10 @@ public class Ediciones extends JFrame {
 	{
 		try
 		{
-			ediciones = Sistema.getInstance().getEdiciones();
+			model.getDataVector().removeAllElements();
+			
+			Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+			ediciones = Sistema.getInstance().getEdicionesByPublicacion(publicacion.getCodigo());
 			
 			for (Edicion edicion : ediciones) {
 				model.addRow(new Object[] { edicion.getCodigo(), edicion.getTituloDeTapa(), edicion.getPrecio(), edicion.getCantidadEjemplares(), edicion.getFechaSalida()});
@@ -323,5 +385,29 @@ public class Ediciones extends JFrame {
 		{
 			ex.printStackTrace();
 		}
+	}
+		 
+	public boolean isThisDateValid(String dateToValidate, String dateFromat){
+ 
+		if(dateToValidate == null){
+			return false;
+		}
+ 
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFromat);
+		sdf.setLenient(false);
+ 
+		try {
+ 
+			//if not valid, it will throw ParseException
+			Date date = sdf.parse(dateToValidate);
+			System.out.println(date);
+ 
+		} catch (ParseException e) {
+ 
+			e.printStackTrace();
+			return false;
+		}
+ 
+		return true;
 	}
 }
