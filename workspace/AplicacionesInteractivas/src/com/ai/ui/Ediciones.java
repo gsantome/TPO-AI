@@ -202,15 +202,15 @@ public class Ediciones extends JFrame {
 	            	{
 		            	lblError.setText("");
 		            	
-		            	if(!isThisDateValid(textFieldFecha.getText(), "dd/MM/yyyy"))
-		            		lblError.setText("Formato de fecha inválida. Formato correcto dd/MM/yyyy");
+		            	if(!isThisDateValid(textFieldFecha.getText(), "yyyy-MM-dd"))
+		            		lblError.setText("Formato de fecha inválida. Formato correcto yyyy-MM-dd");
 		            	else
 		            	{
 			            	Edicion edicion = new Edicion (
 			            			0,
 			            			textFieldTitulo.getText(),
 			            			Float.parseFloat(textFieldPrecio.getText()),
-			            			new SimpleDateFormat("dd/MM/yyyy").parse(textFieldFecha.getText()),
+			            			new SimpleDateFormat("yyyy-MM-dd").parse(textFieldFecha.getText()),
 			            			Integer.decode(textFieldNEjemplares.getText())
 			            			);
 			            	
@@ -259,9 +259,9 @@ public class Ediciones extends JFrame {
 					{
 						lblError.setText("La cantidad de ejemplares no puede estar vacio");
 					}
-					else if(!isThisDateValid(textFieldFecha.getText(), "dd/MM/yyyy"))
+					else if(!isThisDateValid(textFieldFecha.getText(), "yyyy-MM-dd"))
 					{
-						lblError.setText("Formato de fecha inválida. Formato correcto dd/MM/yyyy");
+						lblError.setText("Formato de fecha inválida. Formato correcto yyyy-MM-dd");
 					}
 					else
 					{
@@ -276,7 +276,7 @@ public class Ediciones extends JFrame {
 		            			Integer.decode(model.getValueAt(table.getSelectedRow(), 0).toString()),
 		            			textFieldTitulo.getText(),
 		            			Float.parseFloat(textFieldPrecio.getText()),
-		            			new Date(),
+		            			new SimpleDateFormat("yyyy-MM-dd").parse(textFieldFecha.getText()),
 		            			Integer.decode(textFieldNEjemplares.getText())
 		            			);
 						

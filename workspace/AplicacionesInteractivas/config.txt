@@ -1,5 +1,5 @@
 jdbc=jdbc:sqlserver://
 servidor=localhost:1433
-usuario=sa
-password=sa
+usuario=AI2015
+password=Global2016.
 conexiones=3

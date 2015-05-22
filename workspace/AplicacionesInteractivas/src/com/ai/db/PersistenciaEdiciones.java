@@ -62,11 +62,11 @@ public class PersistenciaEdiciones extends Persistencia {
 			Edicion edicion = (Edicion)obj;
 			
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement statement = conn.prepareStatement("update AplicacionesInteractivas.dbo.Ediciones" +
-												"set tituloTapa = ?" +
-												"set precio = ?" +
-												"set cantidadEjemplares = ?" +
-												"set fechaSalida = ?" +
+			PreparedStatement statement = conn.prepareStatement("update AplicacionesInteractivas.dbo.Ediciones " +
+												"set tituloTapa = ?," +
+												"precio = ?," +
+												"cantidadEjemplares = ?," +
+												"fechaSalida = ? " +
 												"where idEdicion = ?");
 			
 			statement.setString(1, edicion.getTituloDeTapa());
@@ -90,7 +90,7 @@ public class PersistenciaEdiciones extends Persistencia {
 			int codigo = (int)obj;
 			
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement statement = conn.prepareStatement("delete from AplicacionesInteractivas.dbo.Ediciones" +
+			PreparedStatement statement = conn.prepareStatement("delete from AplicacionesInteractivas.dbo.Ediciones " +
 												"where idEdicion = ?");
 			statement.setInt(1,codigo);
 			
