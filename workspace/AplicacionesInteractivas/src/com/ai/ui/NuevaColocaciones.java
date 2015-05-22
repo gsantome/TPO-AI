@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,13 +27,7 @@ import com.ai.models.PautaXAgotado;
 import com.ai.models.PautaXDefecto;
 import com.ai.models.PautaXExcesoDevolucion;
 import com.ai.models.PautaXZona;
-import com.ai.models.Publicacion;
 import com.ai.models.Puesto;
-
-import javax.swing.JTextField;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class NuevaColocaciones extends JFrame {
 
@@ -40,15 +35,16 @@ public class NuevaColocaciones extends JFrame {
 	private JTable table_1;
 	private JComboBox comboBox;
 	private JLabel lblCondicional;
+	private JButton btnContinuar;
+	private JTextField txtCondicional;
 	
 	private DefaultTableModel model;
 	private int cantidadEjemplares;
 	private int idPublicacion;
 	private int idEdicion;
 	private ArrayList<ItemColocacion> colocaciones;
-	private int cantAgregados = 0;
 	private Pauta pauta;
-	private JTextField txtCondicional;
+	
 
 	/**
 	 * Create the frame.
@@ -75,7 +71,22 @@ public class NuevaColocaciones extends JFrame {
 		comboBox = new JComboBox();
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				loadDataByPauta();
+				
+				TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
+				
+				if( selectedPauta == TiposPautas.PorDefecto ) {
+					hideCondicional();
+				}
+				else if( selectedPauta == TiposPautas.PorExceso ) {
+					hideCondicional();
+				}
+				else if( selectedPauta == TiposPautas.PorZona ) {
+					showCondicional("Zona");
+				}
+				else if( selectedPauta == TiposPautas.PorAgotado ) {
+					showCondicional("Ultimas ediciones");
+				}
+				
 			}
 		});
 		comboBox.setModel(new DefaultComboBoxModel(TiposPautas.values()));
@@ -83,7 +94,7 @@ public class NuevaColocaciones extends JFrame {
 		contentPane.add(comboBox);
 		
 		table_1 = new JTable();
-		table_1.setBounds(15, 103, 469, 484);
+		table_1.setBounds(15, 144, 469, 443);
 		contentPane.add(table_1);
 		
 		model.addColumn("Puesto");
@@ -92,7 +103,7 @@ public class NuevaColocaciones extends JFrame {
 		
 		table_1.setModel(model);
 		
-		JButton btnContinuar = new JButton("Generar");
+		btnContinuar = new JButton("Generar");
 		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -101,6 +112,7 @@ public class NuevaColocaciones extends JFrame {
 			}
 		});
 		btnContinuar.setBounds(369, 603, 115, 29);
+		btnContinuar.setEnabled(false);
 		contentPane.add(btnContinuar);
 		
 		lblCondicional = new JLabel("Zona");
@@ -111,6 +123,19 @@ public class NuevaColocaciones extends JFrame {
 		txtCondicional.setBounds(149, 61, 335, 26);
 		contentPane.add(txtCondicional);
 		txtCondicional.setColumns(10);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				loadDataByPauta();
+				
+				btnContinuar.setEnabled(true);
+				
+			}
+		});
+		btnBuscar.setBounds(369, 99, 115, 29);
+		contentPane.add(btnBuscar);
 		
 		hideCondicional();
 //		loadDataByPauta();
@@ -173,13 +198,14 @@ public class NuevaColocaciones extends JFrame {
 			}
 			else if( selectedPauta == TiposPautas.PorZona ) {
 				this.showCondicional("Zona");
+				int zona = Integer.parseInt(this.txtCondicional.getText());
+				pauta = new PautaXZona( zona );
 				
-				pauta = new PautaXZona();
 			}
 			else if( selectedPauta == TiposPautas.PorAgotado ) {
 				this.showCondicional("Ultimas ediciones");
-				
-				pauta = new PautaXAgotado();
+				int cantUltimasEdiciones = Integer.parseInt(this.txtCondicional.getText());
+				pauta = new PautaXAgotado(cantUltimasEdiciones);
 			}
 			
 			if( pauta != null ) {
@@ -195,8 +221,6 @@ public class NuevaColocaciones extends JFrame {
 				for (int i = rowCount - 1; i >= 0; i--) {
 				    dm.removeRow(i);
 				}
-				
-				cantAgregados = colocaciones.size();
 				
 				for (ItemColocacion itemColocacion : colocaciones) {
 					
