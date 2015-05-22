@@ -1,7 +1,6 @@
 package com.ai.ui;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -10,14 +9,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.ai.business.Colocacion;
 import com.ai.controller.Sistema;
 import com.ai.models.Edicion;
 import com.ai.models.Publicacion;
-import javax.swing.JTextPane;
-import javax.swing.JTextField;
+import com.ai.observer.Editor;
 
 public class Colocaciones extends JFrame {
 
@@ -70,15 +71,25 @@ public class Colocaciones extends JFrame {
 		JButton btnContinuar = new JButton("Continuar");
 		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int idPublicacion = ((Publicacion)comboBoxPublicaciones.getSelectedItem()).getCodigo();
-				int idEdicion = ((Edicion)comboBoxEdiciones.getSelectedItem()).getCodigo();
-				int cantEjemplares = Integer.parseInt(txtCantidadEjemplares.getText());
 				
-				NuevaColocaciones resultadoColocaciones = new NuevaColocaciones(idPublicacion, idEdicion, cantEjemplares);
-				resultadoColocaciones.pack();
-				resultadoColocaciones.setVisible(true);
-				
-				self.dispose();
+				if( isNumeric(txtCantidadEjemplares.getText()) ) {
+					int idPublicacion = ((Publicacion)comboBoxPublicaciones.getSelectedItem()).getCodigo();
+					int idEdicion = ((Edicion)comboBoxEdiciones.getSelectedItem()).getCodigo();
+					int cantEjemplares = Integer.parseInt(txtCantidadEjemplares.getText());
+					
+					Colocacion colocacion = new Colocacion();
+					
+					inicializarObserver( colocacion );
+					
+					NuevaColocaciones resultadoColocaciones = new NuevaColocaciones(idPublicacion, idEdicion, cantEjemplares, colocacion);
+					resultadoColocaciones.pack();
+					resultadoColocaciones.setVisible(true);
+					
+					self.dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "La cantidad de ejemplares debe ser un valor numerico");
+				}
 			}
 		});
 		btnContinuar.setBounds(362, 168, 108, 23);
@@ -94,6 +105,14 @@ public class Colocaciones extends JFrame {
 		txtCantidadEjemplares.setColumns(10);
 		
 		loadPublicaciones();
+	}
+	
+	private void inicializarObserver(Colocacion colocacion) {
+		Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+		
+		Editor editor = new Editor(publicacion.getEditor());
+		
+		colocacion.registerObserver(editor);
 	}
 	
 	private void loadPublicaciones() {
@@ -114,5 +133,16 @@ public class Colocaciones extends JFrame {
 		for (Edicion edicion : ediciones) {
 			comboBoxEdiciones.addItem(edicion);
 		}
+	}
+	
+	public static boolean isNumeric(String str)  
+	{  
+		try {  
+			double d = Double.parseDouble(str);  
+		}  
+		catch(NumberFormatException nfe) {  
+			return false; 
+		}  
+		return true;  
 	}
 }

@@ -1,22 +1,29 @@
 package com.ai.business;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import com.ai.models.ItemColocacion;
+import com.ai.observer.Observable;
+import com.ai.observer.Observer;
 
-public class Colocacion {
+public class Colocacion implements Observable {
 	private int codigo;
 	private String pauta;
 	private int idEdicion;
 	private Date fecha;
 	private Vector<ItemColocacion> itemsColocaciones;
 	
+	private ArrayList<Observer> observers; 
+	
 	public Colocacion() {
+		this.observers = new ArrayList<Observer>();
 		this.itemsColocaciones = new Vector<ItemColocacion>();
 	}
 	
 	public Colocacion( int codigo, int idEdicion, String pauta, Date fecha ) {
+		this.observers = new ArrayList<Observer>();
 		this.itemsColocaciones = new Vector<ItemColocacion>();
 		
 		this.codigo = codigo;
@@ -71,5 +78,24 @@ public class Colocacion {
 	
 	public void addItemColocacion( ItemColocacion itemColocacion ) {
 		this.itemsColocaciones.add( itemColocacion );
+	}
+
+	@Override
+	public void registerObserver(Observer observer) {
+		observers.add(observer);	
+	}
+
+	@Override
+	public void removeObservers() {
+		observers.clear();
+	}
+
+	@Override
+	public void notifyObservers(int cantidad) {
+		System.out.println("Empezamos a notificar a los editores");
+		for (Observer observer : observers) {
+			observer.update(cantidad);
+		}
+		
 	}
 }
