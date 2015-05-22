@@ -26,13 +26,20 @@ import com.ai.models.PautaXAgotado;
 import com.ai.models.PautaXDefecto;
 import com.ai.models.PautaXExcesoDevolucion;
 import com.ai.models.PautaXZona;
+import com.ai.models.Publicacion;
 import com.ai.models.Puesto;
+
+import javax.swing.JTextField;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class NuevaColocaciones extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table_1;
 	private JComboBox comboBox;
+	private JLabel lblCondicional;
 	
 	private DefaultTableModel model;
 	private int cantidadEjemplares;
@@ -41,6 +48,7 @@ public class NuevaColocaciones extends JFrame {
 	private ArrayList<ItemColocacion> colocaciones;
 	private int cantAgregados = 0;
 	private Pauta pauta;
+	private JTextField txtCondicional;
 
 	/**
 	 * Create the frame.
@@ -65,12 +73,17 @@ public class NuevaColocaciones extends JFrame {
 		contentPane.add(lblPautaAUtilizar);
 		
 		comboBox = new JComboBox();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loadDataByPauta();
+			}
+		});
 		comboBox.setModel(new DefaultComboBoxModel(TiposPautas.values()));
 		comboBox.setBounds(149, 11, 335, 31);
 		contentPane.add(comboBox);
 		
 		table_1 = new JTable();
-		table_1.setBounds(15, 58, 469, 529);
+		table_1.setBounds(15, 103, 469, 484);
 		contentPane.add(table_1);
 		
 		model.addColumn("Puesto");
@@ -90,7 +103,17 @@ public class NuevaColocaciones extends JFrame {
 		btnContinuar.setBounds(369, 603, 115, 29);
 		contentPane.add(btnContinuar);
 		
-		loadDataByPauta();
+		lblCondicional = new JLabel("Zona");
+		lblCondicional.setBounds(15, 67, 131, 20);
+		contentPane.add(lblCondicional);
+		
+		txtCondicional = new JTextField();
+		txtCondicional.setBounds(149, 61, 335, 26);
+		contentPane.add(txtCondicional);
+		txtCondicional.setColumns(10);
+		
+		hideCondicional();
+//		loadDataByPauta();
 	}
 	
 	private void crearColocacion() {
@@ -117,50 +140,77 @@ public class NuevaColocaciones extends JFrame {
 		this.dispose();
 	}
 	
+	private void showCondicional(String label) {
+		this.lblCondicional.setText(label);
+		this.lblCondicional.setVisible(true);
+		this.txtCondicional.setVisible(true);
+	}
+	
+	private void hideCondicional() {
+		if( this.lblCondicional != null ) {
+			this.lblCondicional.setVisible(false);
+			this.txtCondicional.setVisible(false);
+		}
+		
+	}
+	
 	private void loadDataByPauta() {
 		
-		TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
-		
-		pauta = null;
-		
-		if( selectedPauta == TiposPautas.PorDefecto ) {
-			pauta = new PautaXDefecto();
-		}
-		else if( selectedPauta == TiposPautas.PorExceso ) {
-			pauta = new PautaXExcesoDevolucion();
-		}
-		else if( selectedPauta == TiposPautas.PorZona ) {
-			pauta = new PautaXZona();
-		}
-		else if( selectedPauta == TiposPautas.PorAgotado ) {
-			pauta = new PautaXAgotado();
-		}
-		
-		if( pauta != null ) {
+		if( table_1 != null ) {
+			TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
 			
-			//TODO Como todas las pautas estan con arraylist y nosotros manejamos vector entionces aca es donde lo casteo
-			ArrayList<Puesto> puestos = new ArrayList<Puesto>(Sistema.getInstance().getPuestos());
+			pauta = null;
 			
-			colocaciones = pauta.procesarColocaciones(puestos, this.cantidadEjemplares, this.idPublicacion, this.idEdicion);
-			
-			for (int i = 0; i < cantAgregados; i++) {
-				model.removeRow(i);
+			if( selectedPauta == TiposPautas.PorDefecto ) {
+				this.hideCondicional();
+				
+				pauta = new PautaXDefecto();
+			}
+			else if( selectedPauta == TiposPautas.PorExceso ) {
+				this.hideCondicional();
+				
+				pauta = new PautaXExcesoDevolucion();
+			}
+			else if( selectedPauta == TiposPautas.PorZona ) {
+				this.showCondicional("Zona");
+				
+				pauta = new PautaXZona();
+			}
+			else if( selectedPauta == TiposPautas.PorAgotado ) {
+				this.showCondicional("Ultimas ediciones");
+				
+				pauta = new PautaXAgotado();
 			}
 			
-			cantAgregados = colocaciones.size();
-			
-			for (ItemColocacion itemColocacion : colocaciones) {
+			if( pauta != null ) {
 				
-				Puesto puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
+				//TODO Como todas las pautas estan con arraylist y nosotros manejamos vector entionces aca es donde lo casteo
+				ArrayList<Puesto> puestos = new ArrayList<Puesto>(Sistema.getInstance().getPuestos());
 				
-				model.addRow(new Object[] { 
-						puesto.getNombre(), 
-						puesto.getDireccion(),
-						itemColocacion.getCantidadEjemplares() 
-					});
+				colocaciones = pauta.procesarColocaciones(puestos, this.cantidadEjemplares, this.idPublicacion, this.idEdicion);
+				
+				DefaultTableModel dm = (DefaultTableModel)table_1.getModel();
+				int rowCount = dm.getRowCount();
+				//Remove rows one by one from the end of the table
+				for (int i = rowCount - 1; i >= 0; i--) {
+				    dm.removeRow(i);
+				}
+				
+				cantAgregados = colocaciones.size();
+				
+				for (ItemColocacion itemColocacion : colocaciones) {
+					
+					Puesto puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
+					
+					model.addRow(new Object[] { 
+							puesto.getNombre(), 
+							puesto.getDireccion(),
+							itemColocacion.getCantidadEjemplares() 
+						});
+					
+				}
 				
 			}
-			
 		}
 		
 		
