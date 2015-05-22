@@ -130,9 +130,17 @@ public class NuevaColocaciones extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				loadDataByPauta();
+				if( isNumeric(txtCondicional.getText()) ) {
+					loadDataByPauta();
+					
+					btnContinuar.setEnabled(true);
+				}
+				else {
+					btnContinuar.setEnabled(false);
+					
+					JOptionPane.showMessageDialog(null, "El valor ingresado debe ser numerico");
+				}
 				
-				btnContinuar.setEnabled(true);
 				
 			}
 		});
@@ -182,6 +190,17 @@ public class NuevaColocaciones extends JFrame {
 			this.txtCondicional.setVisible(false);
 		}
 		
+	}
+	
+	public static boolean isNumeric(String str)  
+	{  
+		try {  
+			double d = Double.parseDouble(str);  
+		}  
+		catch(NumberFormatException nfe) {  
+			return false; 
+		}  
+		return true;  
 	}
 	
 	private void loadDataByPauta() {
