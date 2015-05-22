@@ -130,7 +130,8 @@ public class PautaXAgotado extends Pauta{
 													break;
 											default:
 				}
-				cantidadNuevaColocacion += ReporteColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idPublicacion).getCantidadEjemplares();
+				//cantidadNuevaColocacion += ReporteColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idPublicacion).getCantidadEjemplares();
+				cantidadNuevaColocacion += PersistenciaItemsColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idEdicion).getCantidadEjemplares();
 				ItemColocacion nuevaColocacion = new ItemColocacion(puesto.getCodigo(), cantidadNuevaColocacion, 0, idEdicion, idPublicacion, new Date());
 				this.setEjemplaresNecesarios(this.getEjemplaresNecesarios()+cantidadNuevaColocacion);
 				arrayColocacionesGeneradas.add(nuevaColocacion);
