@@ -3,11 +3,11 @@ package com.ai.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import com.ai.models.ItemColocacion;
-import com.ai.models.Publicacion;
 
 public class PersistenciaItemsColocacion extends Persistencia {
 
@@ -55,14 +55,14 @@ public class PersistenciaItemsColocacion extends Persistencia {
 		return null;
 	}
 
-	public Vector<ItemColocacion> getLastThreeDayItems(int idPuesto) {
+	public ArrayList<ItemColocacion> getLastThreeDayItems(int idPuesto, int idPublicacion) {
 		// debe devolver la lista del mas nuevo al mas viejo. Solo los ultimos 3 dias
 		
 		try {
-			Vector<ItemColocacion> list = new Vector<ItemColocacion>();
+			ArrayList<ItemColocacion> list = new ArrayList<ItemColocacion>();
 			
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idPuesto = ? AND convert(date, fecha) BETWEEN (GETDATE() - 3) AND GETDATE() ORDER BY fecha DESC");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idPuesto = ? AND idPublicacion = ? AND convert(date, fecha) BETWEEN (GETDATE() - 3) AND GETDATE() ORDER BY fecha DESC");
 			statement.setInt(1, idPuesto);
 			
 			ResultSet result = statement.executeQuery();
@@ -71,7 +71,6 @@ public class PersistenciaItemsColocacion extends Persistencia {
 				int id = result.getInt("idPublicacion");
 				int ejemplares = result.getInt("totalEjemplaresEntregados");
 				int devoluciones = result.getInt("totalEjemplaresDevueltos");
-				int idPublicacion = result.getInt("idPublicacion");
 				int idEdicion = result.getInt("idEdicion");
 				Date date = result.getDate("fecha");
 				
@@ -91,10 +90,35 @@ public class PersistenciaItemsColocacion extends Persistencia {
 	}
 	
 	public ItemColocacion getUltimaColocacion(int idPuesto, int idEdicion) {
-		// devolver ultima colocacion de una edicion particular para un puesto particular
+		ItemColocacion last = new ItemColocacion();
+		try {
+			
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idPuesto = ? AND idEdicion= ? ORDER BY fecha DESC");
+			statement.setInt(1, idPuesto);
+			statement.setInt(2, idEdicion);
+			ResultSet result = statement.executeQuery();
+			if (result.next() ){
+				int id = result.getInt("idPublicacion");
+				int ejemplares = result.getInt("totalEjemplaresEntregados");
+				int devoluciones = result.getInt("totalEjemplaresDevueltos");
+				int publicacion = result.getInt("idPublicacion");
+				Date date = result.getDate("fecha");
+				
+				last = new ItemColocacion(id, ejemplares, devoluciones, idEdicion, publicacion, date);		
+
+			}
+			
+			
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
 		
-		
-		return null;
+			return null;
+		}
+		return last;
 	}
 
 	public void insertAll(Vector<ItemColocacion> itemsColocaciones) {
@@ -121,5 +145,42 @@ public class PersistenciaItemsColocacion extends Persistencia {
 			System.err.println(ex.getStackTrace());
 		}
 		
+	}
+
+	public ArrayList<ItemColocacion> getUltimasColocaciones(int idPuesto,
+			int idPublicacion, int cantUltimasEdiciones) {
+		ArrayList<ItemColocacion> list = new ArrayList<ItemColocacion>();
+		try {
+			
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idPuesto = ? AND idPublicacion= ? AND convert(date, fecha) BETWEEN (GETDATE() - ?) AND GETDATE() ORDER BY fecha DESC");
+			statement.setInt(1, idPuesto);
+			statement.setInt(2, idPublicacion);
+			statement.setInt(3, cantUltimasEdiciones);
+			ResultSet result = statement.executeQuery();
+			
+			while( result.next() && cantUltimasEdiciones>0) {
+				int id = result.getInt("idPublicacion");
+				int ejemplares = result.getInt("totalEjemplaresEntregados");
+				int devoluciones = result.getInt("totalEjemplaresDevueltos");
+				int publicacion = result.getInt("idPublicacion");
+				int idEdicion = result.getInt("idEdicion");
+				Date date = result.getDate("fecha");
+				
+				ItemColocacion itemColocacion = new ItemColocacion(id, ejemplares, devoluciones, idEdicion, publicacion, date);		
+				list.add(itemColocacion);
+				cantUltimasEdiciones--;
+			}
+			
+			
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		
+			return null;
+		}
+		return list;
 	}
 }
