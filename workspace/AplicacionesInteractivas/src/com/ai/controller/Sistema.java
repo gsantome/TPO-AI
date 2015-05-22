@@ -1,11 +1,13 @@
 package com.ai.controller;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Vector;
 
+import com.ai.db.PersistenciaEdiciones;
+import com.ai.db.PersistenciaPublicaciones;
+import com.ai.db.PersistenciaPuestos;
 import com.ai.models.Edicion;
 import com.ai.models.Publicacion;
+import com.ai.models.Puesto;
 
 public class Sistema {
 	private static Sistema _sistema;
@@ -22,36 +24,44 @@ public class Sistema {
 		return _sistema;
 	}
 	
-	public Vector<Publicacion> getPublicaciones() {
-		Calendar calendar = Calendar.getInstance();         
-		calendar.add(Calendar.MONTH, 1);
-		calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+	public Vector<Puesto> getPuestos() {
 		
-		Vector<Publicacion> publicaciones = new Vector<Publicacion>();
+		PersistenciaPuestos persistencia = PersistenciaPuestos.getInstance();
 		
-		Publicacion publicacion1 = new Publicacion(1, "La Nacion", "Domingo", "Pepe", "Politica", "Elecciones", false, "Semanal", "espanol", "Argentina");
-		Publicacion publicacion2 = new Publicacion(2, "La Nacion", "Sabado", "Gonzalo", "Economia", "Inflacion", false, "Semanal", "espanol", "Argentina");
+		Vector<Object> vector = persistencia.selectAll();
+		Vector typelessVector = vector;
 		
-		publicacion1.addEdicion(new Edicion(1, "Cristina y sus negocios", 10.0, new Date(), 100));
-		publicacion2.addEdicion(new Edicion(1, "La inflacion", 2.0, calendar.getTime(), 150));
+		return (Vector<Puesto>)typelessVector;
 		
-		publicaciones.addElement(publicacion1);
-		publicaciones.addElement(publicacion2);
-		
-		return publicaciones;
-
 	}
 	
-	public Vector<Edicion> getEdiciones(){
-		Calendar calendar = Calendar.getInstance();         
-		calendar.add(Calendar.MONTH, 1);
-		calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+	public Vector<Publicacion> getPublicaciones() {
 		
-		Vector<Edicion> ediciones = new Vector<Edicion>();
-		ediciones.add(new Edicion(1, "Cristina y sus negocios", 10.0, new Date(), 100));
-		ediciones.add(new Edicion(1, "La inflacion", 2.0, calendar.getTime(), 150));
+		PersistenciaPublicaciones persistencia = PersistenciaPublicaciones.getInstance();
 		
-		return ediciones;
+		Vector<Object> vector = persistencia.selectAll();
+		Vector typelessVector = vector;
+		
+		return (Vector<Publicacion>)typelessVector;
+		
+	}
+	
+	public Vector<Edicion> getEdiciones(int idPublicacion){
+		
+		PersistenciaEdiciones persistencia = PersistenciaEdiciones.getInstance();
+		
+		Vector<Object> vector = persistencia.selectByPublicacion(idPublicacion);
+		Vector typelessVector = vector;
+		
+		return (Vector<Edicion>)typelessVector;
+	}
+	
+	public Vector<Edicion> getEdiciones() {
+		PersistenciaEdiciones persistencia = PersistenciaEdiciones.getInstance();
+		Vector<Object> vector = persistencia.selectAll();
+		Vector typelessVector = vector;
+		
+		return (Vector<Edicion>)typelessVector;
 	}
 	
 	public void altaEdicion(Edicion edicion)
