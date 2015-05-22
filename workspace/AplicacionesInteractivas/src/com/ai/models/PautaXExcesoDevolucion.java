@@ -9,6 +9,7 @@ public class PautaXExcesoDevolucion extends Pauta {
 		super();
 	}
 	
+	//gonzalo
 
 	@Override
 	public ArrayList<ItemColocacion> procesarColocaciones(
