@@ -3,6 +3,8 @@ package com.ai.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.ai.db.PersistenciaItemsColocacion;
+
 public class PautaXExcesoDevolucion extends Pauta {
 
 	public PautaXExcesoDevolucion() {
@@ -21,7 +23,7 @@ public class PautaXExcesoDevolucion extends Pauta {
 		int particionEjemplares;
 		int descuento ;
 		for (Puesto puesto : puestos){
-			colocacionAnterior = ReporteColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idPublicacion);
+			colocacionAnterior = PersistenciaItemsColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idEdicion);
 			descuento = descuentoTablaPorExceso(colocacionAnterior.getCantidadEjemplares(), colocacionAnterior.getCantidadDevoluciones());
 
 			
