@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Puesto {
 	private int codigo;
 	private String direccion;
+	private String nombre;
 	private String barrio;
 	private int idZona;
 	private String tipoPublicacion;
@@ -13,9 +14,10 @@ public class Puesto {
 		
 	}
 	
-	public Puesto(int codigo, String direccion, String barrio, int idZona, String tipoPublicacion) {
+	public Puesto(int codigo, String nombre, String direccion, String barrio, int idZona, String tipoPublicacion) {
 		this.codigo = codigo;
 		this.direccion = direccion;
+		this.nombre = nombre;
 		this.barrio = barrio;
 		this.idZona = idZona;
 		this.tipoPublicacion = tipoPublicacion;
@@ -48,6 +50,14 @@ public class Puesto {
 	
 	public ArrayList<ItemColocacion> getUltimasColocaciones(int cantidad){
 		return null;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	

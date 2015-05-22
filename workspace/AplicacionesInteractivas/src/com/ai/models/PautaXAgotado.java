@@ -22,16 +22,22 @@
 
 package com.ai.models;
 import java.util.ArrayList;
+import java.util.Date;
 
-import com.ai.business.Colocacion;
 
-public class PautaXAgotado extends Pauta {
+public class PautaXAgotado extends Pauta{
+	private int cantUltimasEdiciones;
 	
 	public PautaXAgotado() {
 		super();
+		this.cantUltimasEdiciones = 1;
+	}
+	public PautaXAgotado(int cantUltimasEdiciones) {
+		super();
+		this.cantUltimasEdiciones = cantUltimasEdiciones;
 	}
 	
-	public ArrayList<Colocacion> getColocacion(int CantidadEdiciones, ArrayList<Puesto> puestos){
+	/*public ArrayList<Colocacion> getColocacion(int CantidadEdiciones, ArrayList<Puesto> puestos){
 		ArrayList <Colocacion> arrayColocacionesGeneradas = new ArrayList<Colocacion>();
 		
 		
@@ -60,7 +66,7 @@ public class PautaXAgotado extends Pauta {
 											case 5:
 												CantidadNuevaColocacion = 5;
 												    break;
-				
+				j
 											case 6:
 											case 7:
 											case 8:
@@ -73,6 +79,58 @@ public class PautaXAgotado extends Pauta {
 				
 				Colocacion nuevaColocacion = new Colocacion();
 				nuevaColocacion.setCantEjemplares(CantidadNuevaColocacion);
+				arrayColocacionesGeneradas.add(nuevaColocacion);
+			}
+		}
+		return arrayColocacionesGeneradas;
+	}
+	*/
+
+	@Override
+	public ArrayList<ItemColocacion> procesarColocaciones(
+			ArrayList<Puesto> puestos, int totalEjemplares, int idPublicacion,
+			int idEdicion) {
+		ArrayList <ItemColocacion> arrayColocacionesGeneradas = new ArrayList<ItemColocacion>();
+		
+		
+		for (Puesto puesto : puestos) {
+			ArrayList<ItemColocacion> historial = ReporteColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), this.cantUltimasEdiciones);
+			
+			boolean cumpleAgotados = true;
+			
+			for (int i = 0; i < totalEjemplares; i++){			//Recorr las N ediciones anteriores y chequeo que haya agotado
+				ItemColocacion historico = historial.get(i);
+				if (historico.getCantidadDevoluciones() > 0){
+					cumpleAgotados = false;
+				}	
+			}
+			int cantidadNuevaColocacion = 0;
+			if (cumpleAgotados){
+				
+				
+				switch (this.cantUltimasEdiciones){
+											case 1:
+												cantidadNuevaColocacion = 3;
+													break;
+											case 2:
+											case 3:
+											case 4:
+											case 5:
+												cantidadNuevaColocacion = 5;
+												    break;
+				
+											case 6:
+											case 7:
+											case 8:
+											case 9:
+											case 10:
+												cantidadNuevaColocacion = 10;
+													break;
+											default:
+				}
+				cantidadNuevaColocacion += ReporteColocacion.getInstance().getUltimaColocacion(puesto.getCodigo(), idPublicacion).getCantidadEjemplares();
+				ItemColocacion nuevaColocacion = new ItemColocacion(puesto.getCodigo(), cantidadNuevaColocacion, 0, idEdicion, idPublicacion, new Date());
+				this.setEjemplaresNecesarios(this.getEjemplaresNecesarios()+cantidadNuevaColocacion);
 				arrayColocacionesGeneradas.add(nuevaColocacion);
 			}
 		}

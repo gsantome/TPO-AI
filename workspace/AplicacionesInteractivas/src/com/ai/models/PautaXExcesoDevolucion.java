@@ -26,7 +26,8 @@ public class PautaXExcesoDevolucion extends Pauta {
 			if (diferencia>0) {		
 				int descuento = PersistenciaPautas.selectTableExceso(diferencia); //pendiente de implementacion
 				itemColActual.setCantidadEjemplares(itemColActual.getCantidadEjemplares()-descuento);
-				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares()-descuento);
+				
+				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares() - descuento);
 			}
 		}
 	}
