@@ -3,7 +3,6 @@ package com.ai.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Vector;
 
 import com.ai.db.PersistenciaItemsColocacion;
 
@@ -36,8 +35,7 @@ public class PautaXDefecto extends Pauta {
 		while (iterator.hasNext()){
 			
 			currentPuesto = iterator.next();
-			Vector<ItemColocacion> vectorHistorial = PersistenciaItemsColocacion.getInstance().getLastThreeDayItems(currentPuesto.getCodigo());
-			historial = new ArrayList<ItemColocacion>(vectorHistorial);
+			historial = PersistenciaItemsColocacion.getInstance().getLastThreeDayItems(currentPuesto.getCodigo(), idPublicacion);
 			itemColocacion = new ItemColocacion (currentPuesto.getCodigo(), calcularEjemplares(historial), 0,idEdicion, idPublicacion, new Date());
 			colocacionZona.add(itemColocacion);
 			ejemplaresNecesarios += itemColocacion.getCantidadEjemplares();

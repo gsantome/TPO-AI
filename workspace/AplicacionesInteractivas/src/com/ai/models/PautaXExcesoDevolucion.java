@@ -8,6 +8,7 @@ public class PautaXExcesoDevolucion extends Pauta {
 	public PautaXExcesoDevolucion() {
 		super();
 	}
+	
 
 	@Override
 	public ArrayList<ItemColocacion> procesarColocaciones(

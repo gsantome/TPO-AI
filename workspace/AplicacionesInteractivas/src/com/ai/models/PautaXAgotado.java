@@ -24,6 +24,8 @@ package com.ai.models;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.ai.db.PersistenciaItemsColocacion;
+
 
 public class PautaXAgotado extends Pauta{
 	private int cantUltimasEdiciones;
@@ -94,8 +96,8 @@ public class PautaXAgotado extends Pauta{
 		
 		
 		for (Puesto puesto : puestos) {
-			ArrayList<ItemColocacion> historial = ReporteColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), idPublicacion, this.cantUltimasEdiciones);
-			
+//			ArrayList<ItemColocacion> historial = ReporteColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), idPublicacion, this.cantUltimasEdiciones);
+			ArrayList<ItemColocacion> historial = PersistenciaItemsColocacion.getInstance().getUltimasColocaciones(puesto.getCodigo(), idPublicacion, idEdicion);
 			boolean cumpleAgotados = true;
 			
 			for (int i = 0; i < cantUltimasEdiciones; i++){			//Recorr las N ediciones anteriores y chequeo que haya agotado
