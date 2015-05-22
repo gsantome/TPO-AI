@@ -61,7 +61,7 @@ public class PersistenciaPuestos extends Persistencia {
 				String tipo = result.getString("tipo");
 				int idZona = result.getInt("idZona");
 				
-				Puesto puesto = new Puesto(id, direccion, barrio, idZona, tipo);
+				Puesto puesto = new Puesto(id, nombre, direccion, barrio, idZona, tipo);
 				
 				list.add(puesto);
 			}
@@ -78,8 +78,36 @@ public class PersistenciaPuestos extends Persistencia {
 
 	@Override
 	public Object selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			Puesto puesto = null;
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("select * from AplicacionesInteractivas.dbo.Puestos WHERE idPuesto = ?");
+			statement.setInt(1, id);
+			
+			ResultSet result = statement.executeQuery();
+			
+			while( result.next() ) {
+				int codigo = result.getInt("idPuesto");
+				String nombre = result.getString("nombre");
+				String direccion = result.getString("direccion");
+				String barrio = result.getString("barrio");
+				String tipo = result.getString("tipo");
+				int idZona = result.getInt("idZona");
+				
+				puesto = new Puesto(codigo, nombre, direccion, barrio, idZona, tipo);
+			}
+			
+			return puesto;			
+		}
+		catch( Exception ex ) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		
+			return null;
+		}
+		
 	}
 
 }

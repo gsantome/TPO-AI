@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import com.ai.models.Edicion;
+import com.ai.models.Puesto;
 
 public class PersistenciaEdiciones extends Persistencia {
 	
@@ -75,8 +76,33 @@ public class PersistenciaEdiciones extends Persistencia {
 
 	@Override
 	public Object selectById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Edicion edicion = null;
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("select * from AplicacionesInteractivas.dbo.Ediciones WHERE idEdicion = ?");
+			statement.setInt(1, id);
+			
+			ResultSet result = statement.executeQuery();
+			
+			while( result.next() ) {
+				int codigo = result.getInt("idEdicion");
+				String tituloDeTapa = result.getString("tituloTapa");
+				double precio = result.getDouble("precio");
+				Date fechaSalida = result.getDate("fechaSalida");
+				int cantidadEjemplares = result.getInt("cantidadEjemplares");
+				
+				edicion = new Edicion(codigo, tituloDeTapa, precio, fechaSalida, cantidadEjemplares);
+			}
+			
+			return edicion;			
+		}
+		catch( Exception ex ) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		
+			return null;
+		}
 	}
 	
 	public Vector<Object> selectByPublicacion(int idPublicacion) {

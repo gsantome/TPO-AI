@@ -1,13 +1,25 @@
 package com.ai.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
-public class PautaXZona implements IPauta{
+public class PautaXZona extends Pauta{
 	private int codigoZona;
 
+	public PautaXZona(){
+		super();
+		this.codigoZona = -1;
+	}
+	
+	public PautaXZona(int codigoZona){
+		super();
+		this.codigoZona = codigoZona;
+	}
+	
+
 	public ArrayList<ItemColocacion> procesarColocaciones(
-			ArrayList<Puesto> puestos, int totalEjemplares) {
+			ArrayList<Puesto> puestos, int totalEjemplares, int idPublicacion, int idEdicion) {
 		// TODO Auto-generated method stub
 		/*
 		 * Para todos los puestos que pertenezcan a la zona 
@@ -21,9 +33,10 @@ public class PautaXZona implements IPauta{
 		Puesto currentPuesto;
 		while (iterator.hasNext()){
 			currentPuesto = (Puesto) iterator.next();
-			item = new ItemColocacion();
+//			public ItemColocacion(int codigoPuesto, int totalEjemplares, int devoluciones, int idEdicion, int idPublicacion, Date fecha) {
+				
+			item = new ItemColocacion(currentPuesto.getCodigo(),0,0,idEdicion,idPublicacion, new Date());
 			item.setCantidadDevoluciones(0);
-			item.setCodigoPuesto(currentPuesto.getCodigo());
 			if ( codigoZona == currentPuesto.getIdZona() ){
 				contadorZona++;
 				//los correspondientes a la zona se agregan al principio de la lista
@@ -40,13 +53,17 @@ public class PautaXZona implements IPauta{
 		 */
 		int particionZona = (int) Math.round(totalEjemplares*0.7/contadorZona);
 		int particionFuera = (totalEjemplares - particionZona*contadorZona)/ (colocacionZona.size()-contadorZona);
-		
+		int particion = 0;
 		while (iColocaciones.hasNext()){
 			item = iColocaciones.next();
 			if (contadorZona >0){
 				item.setCantidadEjemplares(particionZona);
+				particion = this.getEjemplaresNecesarios()+particionZona;
+				this.setEjemplaresNecesarios(particion);
 			}else{
 				item.setCantidadEjemplares(particionFuera);
+				particion = this.getEjemplaresNecesarios()+particionFuera;
+				this.setEjemplaresNecesarios(particion);
 			}
 			contadorZona--;
 		}

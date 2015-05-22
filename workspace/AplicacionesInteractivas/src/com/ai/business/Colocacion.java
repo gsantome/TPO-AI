@@ -1,29 +1,75 @@
 package com.ai.business;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 
 import com.ai.models.ItemColocacion;
 
 public class Colocacion {
-	private int CantEjemplares;
+	private int codigo;
+	private String pauta;
+	private int idEdicion;
+	private Date fecha;
+	private Vector<ItemColocacion> itemsColocaciones;
 	
-	public Colocacion(){
+	public Colocacion() {
+		this.itemsColocaciones = new Vector<ItemColocacion>();
 	}
 	
-	public void setCantEjemplares(int CantEjemplares){
-		this.CantEjemplares = CantEjemplares;
+	public Colocacion( int codigo, int idEdicion, String pauta, Date fecha ) {
+		this.itemsColocaciones = new Vector<ItemColocacion>();
+		
+		this.codigo = codigo;
+		this.idEdicion = idEdicion;
+		this.pauta = pauta;
+		this.fecha = fecha;
 	}
-	public int getCantEjemplares() {
-		return CantEjemplares;
+	
+	public Colocacion( int idEdicion, String pauta, Date fecha ) {
+		this.itemsColocaciones = new Vector<ItemColocacion>();
+		
+		this.idEdicion = idEdicion;
+		this.pauta = pauta;
+		this.fecha = fecha;
 	}
 
-	public ArrayList<ItemColocacion> getItemsColocacion() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getPauta() {
+		return pauta;
+	}
+
+	public void setPauta(String pauta) {
+		this.pauta = pauta;
 	}
 
 	public int getIdEdicion() {
-		// TODO Auto-generated method stub
-		return 0;
+		return idEdicion;
+	}
+
+	public void setIdEdicion(int idEdicion) {
+		this.idEdicion = idEdicion;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public Vector<ItemColocacion> getItemsColocaciones() {
+		return itemsColocaciones;
+	}
+	
+	public void addItemColocacion( ItemColocacion itemColocacion ) {
+		this.itemsColocaciones.add( itemColocacion );
 	}
 }

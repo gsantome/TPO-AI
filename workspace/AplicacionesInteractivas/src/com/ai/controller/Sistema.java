@@ -2,6 +2,8 @@ package com.ai.controller;
 
 import java.util.Vector;
 
+import com.ai.business.Colocacion;
+import com.ai.db.PersistenciaColocaciones;
 import com.ai.db.PersistenciaEdiciones;
 import com.ai.db.PersistenciaPublicaciones;
 import com.ai.db.PersistenciaPuestos;
@@ -22,6 +24,16 @@ public class Sistema {
 		}
 		
 		return _sistema;
+	}
+	
+	public void guardarColocacion(Colocacion colocacion) {
+		
+		PersistenciaColocaciones.getInstance().insert(colocacion);
+		
+	}
+	
+	public Puesto getPuesto(int idPuesto) {
+		return (Puesto)PersistenciaPuestos.getInstance().selectById(idPuesto);
 	}
 	
 	public Vector<Puesto> getPuestos() {

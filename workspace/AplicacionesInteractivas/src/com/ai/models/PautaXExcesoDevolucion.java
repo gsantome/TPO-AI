@@ -26,7 +26,8 @@ public class PautaXExcesoDevolucion extends Pauta {
 			if (diferencia>0) {
 				int descuento = src.com.ai.db.PersistenciaPautas.getInstance().selectTablaExcesos(diferencia);
 				itemColActual.setCantidadEjemplares(itemColActual.getCantidadEjemplares()-descuento);
-				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares()-descuento);
+				
+				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares() - descuento);
 			}
 		}
 	}

@@ -75,7 +75,7 @@ public class PersistenciaItemsColocacion extends Persistencia {
 				int idEdicion = result.getInt("idEdicion");
 				Date date = result.getDate("fecha");
 				
-				ItemColocacion itemColocacion = new ItemColocacion(id, ejemplares, devoluciones);		
+				ItemColocacion itemColocacion = new ItemColocacion(id, ejemplares, devoluciones, idEdicion, idPublicacion, date);		
 				list.add(itemColocacion);
 			}
 			
@@ -94,5 +94,31 @@ public class PersistenciaItemsColocacion extends Persistencia {
 		// devolver ultima colocacion de una edicion particular para un puesto particular
 		
 		return null;
+	}
+
+	public void insertAll(Vector<ItemColocacion> itemsColocaciones) {
+		
+		try {
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			
+			for (ItemColocacion itemColocacion : itemsColocaciones) {
+				
+				PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.ItemsColocaciones (idPuesto, totalEjemplaresEntregados, totalEjemplaresDevueltos, idPublicacion, idEdicion, fecha) values (?, ?, ?, ?, ?, ?)");
+				statement.setInt(1, itemColocacion.getCodigoPuesto());
+				statement.setInt(2, itemColocacion.getCantidadEjemplares());
+				statement.setInt(3, itemColocacion.getCantidadDevoluciones());
+				statement.setInt(4, itemColocacion.getIdPublicacion());
+				statement.setInt(5, itemColocacion.getIdEdicion());
+				statement.setDate(6, new java.sql.Date(itemColocacion.getFechaColocacion().getTime()));
+				
+				statement.executeUpdate();
+				
+			}
+		}
+		catch( Exception ex ) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		}
+		
 	}
 }
