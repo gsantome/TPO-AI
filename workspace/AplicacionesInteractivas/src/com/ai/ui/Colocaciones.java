@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -70,19 +71,25 @@ public class Colocaciones extends JFrame {
 		JButton btnContinuar = new JButton("Continuar");
 		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int idPublicacion = ((Publicacion)comboBoxPublicaciones.getSelectedItem()).getCodigo();
-				int idEdicion = ((Edicion)comboBoxEdiciones.getSelectedItem()).getCodigo();
-				int cantEjemplares = Integer.parseInt(txtCantidadEjemplares.getText());
 				
-				Colocacion colocacion = new Colocacion();
-				
-				inicializarObserver( colocacion );
-				
-				NuevaColocaciones resultadoColocaciones = new NuevaColocaciones(idPublicacion, idEdicion, cantEjemplares, colocacion);
-				resultadoColocaciones.pack();
-				resultadoColocaciones.setVisible(true);
-				
-				self.dispose();
+				if( isNumeric(txtCantidadEjemplares.getText()) ) {
+					int idPublicacion = ((Publicacion)comboBoxPublicaciones.getSelectedItem()).getCodigo();
+					int idEdicion = ((Edicion)comboBoxEdiciones.getSelectedItem()).getCodigo();
+					int cantEjemplares = Integer.parseInt(txtCantidadEjemplares.getText());
+					
+					Colocacion colocacion = new Colocacion();
+					
+					inicializarObserver( colocacion );
+					
+					NuevaColocaciones resultadoColocaciones = new NuevaColocaciones(idPublicacion, idEdicion, cantEjemplares, colocacion);
+					resultadoColocaciones.pack();
+					resultadoColocaciones.setVisible(true);
+					
+					self.dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "La cantidad de ejemplares debe ser un valor numerico");
+				}
 			}
 		});
 		btnContinuar.setBounds(362, 168, 108, 23);
@@ -126,5 +133,16 @@ public class Colocaciones extends JFrame {
 		for (Edicion edicion : ediciones) {
 			comboBoxEdiciones.addItem(edicion);
 		}
+	}
+	
+	public static boolean isNumeric(String str)  
+	{  
+		try {  
+			double d = Double.parseDouble(str);  
+		}  
+		catch(NumberFormatException nfe) {  
+			return false; 
+		}  
+		return true;  
 	}
 }
