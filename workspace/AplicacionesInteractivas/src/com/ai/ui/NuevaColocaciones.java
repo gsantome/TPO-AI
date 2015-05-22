@@ -44,7 +44,6 @@ public class NuevaColocaciones extends JFrame {
 	private int idPublicacion;
 	private int idEdicion;
 	private ArrayList<ItemColocacion> colocaciones;
-	private Pauta pauta;
 	
 
 	/**
@@ -130,17 +129,25 @@ public class NuevaColocaciones extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if( isNumeric(txtCondicional.getText()) ) {
+				TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem(); 
+				
+				if( selectedPauta == TiposPautas.PorZona || selectedPauta == TiposPautas.PorAgotado) {
+					if( isNumeric(txtCondicional.getText()) ) {
+						loadDataByPauta();
+						
+						btnContinuar.setEnabled(true);
+					}
+					else {
+						btnContinuar.setEnabled(false);
+						
+						JOptionPane.showMessageDialog(null, "El valor ingresado debe ser numerico");
+					}
+				}
+				else {
 					loadDataByPauta();
 					
 					btnContinuar.setEnabled(true);
 				}
-				else {
-					btnContinuar.setEnabled(false);
-					
-					JOptionPane.showMessageDialog(null, "El valor ingresado debe ser numerico");
-				}
-				
 				
 			}
 		});
@@ -151,29 +158,11 @@ public class NuevaColocaciones extends JFrame {
 	}
 	
 	private void crearColocacion() {
-		//Chequeo si necesito mas ejemplares
-		if( (this.cantidadEjemplares - pauta.getEjemplaresNecesarios()) < 0 ) {
-			colocacion.notifyObservers(this.cantidadEjemplares - pauta.getEjemplaresNecesarios());
-		}
-		
 		TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
 		
-		colocacion.setIdEdicion(idEdicion);
-		colocacion.setPauta(selectedPauta.toString());
-		colocacion.setFecha(new Date());
-		
-		for (ItemColocacion itemColocacion : colocaciones) {
-			itemColocacion.setIdPublicacion(idPublicacion);
-			itemColocacion.setIdEdicion(idEdicion);
-			
-			colocacion.addItemColocacion(itemColocacion);
-		}
-		
-		Sistema.getInstance().guardarColocacion(colocacion);
+		Sistema.getInstance().crearColocacion(colocacion, cantidadEjemplares, idPublicacion, idEdicion, colocaciones, selectedPauta.toString());
 		
 		JOptionPane.showMessageDialog(null, "Se ha generado la nueva colocacion.");
-		
-		colocacion.removeObservers();
 		
 		this.dispose();
 	}
@@ -208,57 +197,33 @@ public class NuevaColocaciones extends JFrame {
 		if( table_1 != null ) {
 			TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem();
 			
-			pauta = null;
+			int condicional = -1;
 			
-			if( selectedPauta == TiposPautas.PorDefecto ) {
-				this.hideCondicional();
-				
-				pauta = new PautaXDefecto();
-			}
-			else if( selectedPauta == TiposPautas.PorExceso ) {
-				this.hideCondicional();
-				
-				pauta = new PautaXExcesoDevolucion();
-			}
-			else if( selectedPauta == TiposPautas.PorZona ) {
-				this.showCondicional("Zona");
-				int zona = Integer.parseInt(this.txtCondicional.getText());
-				pauta = new PautaXZona( zona );
-				
-			}
-			else if( selectedPauta == TiposPautas.PorAgotado ) {
-				this.showCondicional("Ultimas ediciones");
-				int cantUltimasEdiciones = Integer.parseInt(this.txtCondicional.getText());
-				pauta = new PautaXAgotado(cantUltimasEdiciones);
+			if( isNumeric(this.txtCondicional.getText()) ) {
+				condicional = Integer.parseInt(this.txtCondicional.getText());
 			}
 			
-			if( pauta != null ) {
+			colocaciones = Sistema.getInstance().getItemsColocacionByPauta(selectedPauta, condicional, cantidadEjemplares, idPublicacion, idEdicion);
+			
+			DefaultTableModel dm = (DefaultTableModel)table_1.getModel();
+			int rowCount = dm.getRowCount();
+			//Remove rows one by one from the end of the table
+			for (int i = rowCount - 1; i >= 0; i--) {
+			    dm.removeRow(i);
+			}
+			
+			for (ItemColocacion itemColocacion : colocaciones) {
 				
-				//TODO Como todas las pautas estan con arraylist y nosotros manejamos vector entionces aca es donde lo casteo
-				ArrayList<Puesto> puestos = new ArrayList<Puesto>(Sistema.getInstance().getPuestos());
+				Puesto puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
 				
-				colocaciones = pauta.procesarColocaciones(puestos, this.cantidadEjemplares, this.idPublicacion, this.idEdicion);
-				
-				DefaultTableModel dm = (DefaultTableModel)table_1.getModel();
-				int rowCount = dm.getRowCount();
-				//Remove rows one by one from the end of the table
-				for (int i = rowCount - 1; i >= 0; i--) {
-				    dm.removeRow(i);
-				}
-				
-				for (ItemColocacion itemColocacion : colocaciones) {
-					
-					Puesto puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
-					
-					model.addRow(new Object[] { 
-							puesto.getNombre(), 
-							puesto.getDireccion(),
-							itemColocacion.getCantidadEjemplares() 
-						});
-					
-				}
+				model.addRow(new Object[] { 
+						puesto.getNombre(), 
+						puesto.getDireccion(),
+						itemColocacion.getCantidadEjemplares() 
+					});
 				
 			}
+			
 		}
 		
 		

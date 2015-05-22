@@ -110,9 +110,7 @@ public class Colocaciones extends JFrame {
 	private void inicializarObserver(Colocacion colocacion) {
 		Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
 		
-		Editor editor = new Editor(publicacion.getEditor());
-		
-		colocacion.registerObserver(editor);
+		Sistema.getInstance().inicializarObservers(colocacion, publicacion.getEditor());
 	}
 	
 	private void loadPublicaciones() {
