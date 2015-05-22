@@ -37,14 +37,13 @@ public class PersistenciaEdiciones extends Persistencia {
 			int codigoPublicacion = (int)obj;
 			
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.Ediciones values (?,?,?,?,?)");
+			PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.Ediciones (idPublicacion, tituloTapa, precio, fechaSalida, cantidadEjemplares) values (?,?,?,?,?)");
 			
-			statement.setInt(1, edicion.getCodigo());
-			statement.setInt(2, codigoPublicacion);
-			statement.setString(3, edicion.getTituloDeTapa());
-			statement.setDouble(4, edicion.getPrecio());
-			statement.setDate(5, new java.sql.Date(edicion.getFechaSalida().getTime()));
-			statement.setInt(6, edicion.getCantidadEjemplares());
+			statement.setInt(1, codigoPublicacion);
+			statement.setString(2, edicion.getTituloDeTapa());
+			statement.setDouble(3, edicion.getPrecio());
+			statement.setDate(4, new java.sql.Date(edicion.getFechaSalida().getTime()));
+			statement.setInt(5, edicion.getCantidadEjemplares());
 			
 			statement.execute();
 			
