@@ -7,7 +7,7 @@ import com.ai.db.PersistenciaPautas;
 
 /*Ejecuta sobre la colocacion por defecto calculada
  * Tabla de exceso en base de datos
- *  porcentaje excedido/porcentaje de descuento
+ *  excedido/descuento
  */
 public class PautaXExcesoDevolucion extends Pauta {
 
@@ -22,9 +22,9 @@ public class PautaXExcesoDevolucion extends Pauta {
 			ItemColocacion itemColActual = itemsColActual.get(i);
 			int idpuesto = itemColActual.getCodigoPuesto();
 			ItemColocacion colocacionAnterior = ReporteColocacion.getInstance().getUltimaColocacion(idpuesto, colocacionActual.getIdEdicion());
-			int diferencia = colocacionAnterior.getCantidadDevoluciones()-colocacionAnterior.getCantidadEjemplares();
-			if (diferencia>0) {		
-				int descuento = PersistenciaPautas.selectTableExceso(diferencia); //pendiente de implementacion
+			int diferencia = colocacionAnterior.getCantidadDevoluciones()-colocacionAnterior.getCantidadEjemplares();		
+			if (diferencia>0) {
+				int descuento = src.com.ai.db.PersistenciaPautas.getInstance().selectTablaExcesos(diferencia);
 				itemColActual.setCantidadEjemplares(itemColActual.getCantidadEjemplares()-descuento);
 				colocacionActual.setCantEjemplares(colocacionActual.getCantEjemplares()-descuento);
 			}
