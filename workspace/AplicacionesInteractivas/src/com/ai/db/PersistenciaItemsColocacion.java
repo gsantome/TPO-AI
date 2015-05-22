@@ -64,6 +64,7 @@ public class PersistenciaItemsColocacion extends Persistencia {
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idPuesto = ? AND idPublicacion = ? AND convert(date, fecha) BETWEEN (GETDATE() - 3) AND GETDATE() ORDER BY fecha DESC");
 			statement.setInt(1, idPuesto);
+			statement.setInt(2, idPublicacion);
 			
 			ResultSet result = statement.executeQuery();
 			
