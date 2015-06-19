@@ -1,6 +1,8 @@
 package com.ai.ui;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -16,6 +18,7 @@ import javax.swing.JTree;
 
 import com.ai.controller.Sistema;
 import com.ai.ui.models.*;
+
 import javax.swing.JButton;
 public class ListadoColocacion extends JFrame {
 
@@ -50,6 +53,16 @@ public class ListadoColocacion extends JFrame {
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(107, 73, 103, 20);
 		contentPane.add(comboBox_1);
+		comboBox.addActionListener(new ActionListener(){
+		     public void actionPerformed(ActionEvent ee) {
+		          /*Sistema.getInstance() colocaciones para la edicion seleccionda
+		    	 for (int i = 0;i<colocaciones.size();i++) {
+		 			comboBox_1.addItem(colocaciones.elementAt(i).get);
+		 		}
+		 		*/
+		     }
+		});
+		
 		
 		JButton btnGenerarListado = new JButton("Generar Listado");
 		btnGenerarListado.setBounds(95, 121, 115, 23);
