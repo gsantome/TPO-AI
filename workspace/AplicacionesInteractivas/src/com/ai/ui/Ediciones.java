@@ -220,13 +220,6 @@ public class Ediciones extends JFrame {
 							
 							loadEdiciones(model);
 							
-							/*model.addRow(new Object[] {
-									edicion.getCodigo(),
-									edicion.getTituloDeTapa(),
-									edicion.getPrecio(),
-									edicion.getCantidadEjemplares(),
-									edicion.getFechaSalida()
-									});*/
 		            	}
 	            	}
 	            	catch(Exception ex)
@@ -374,8 +367,10 @@ public class Ediciones extends JFrame {
 	{
 		try
 		{
-			model.getDataVector().removeAllElements();
-			
+			int rowCount = model.getRowCount();
+			for (int i = rowCount - 1; i >= 0; i--) {
+			    model.removeRow(i);
+			}
 			PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
 			ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
 			
