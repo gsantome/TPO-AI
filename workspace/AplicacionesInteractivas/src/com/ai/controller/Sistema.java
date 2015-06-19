@@ -20,6 +20,7 @@ import com.ai.models.PautaXZona;
 import com.ai.models.Publicacion;
 import com.ai.models.Puesto;
 import com.ai.observer.Editor;
+import com.ai.ui.models.ColocacionView;
 import com.ai.ui.models.EdicionView;
 import com.ai.ui.models.ItemColocacionView;
 import com.ai.ui.models.PublicacionView;
@@ -80,12 +81,13 @@ public class Sistema {
 				puesto.getTipoPublicacion());
 	}
 	
-	public Vector<Colocacion> getColocaciones(int idEdicion) {
-		Vector<Colocacion> colocaciones = new Vector<Colocacion>();
+	public Vector<ColocacionView> getColocaciones(int idEdicion) {
+		Vector<ColocacionView> colocaciones = new Vector<ColocacionView>();
 		
 		for (Colocacion colocacion : this.colocaciones) {
 			if( colocacion.getIdEdicion() == idEdicion ) {
-				colocaciones.add(colocacion);
+				ColocacionView colocacionv = new ColocacionView(colocacion.getCodigo(),colocacion.getIdEdicion(),colocacion.getPauta(),colocacion.getFecha());
+				colocaciones.add(colocacionv);
 			}
 		}
 		

@@ -27,9 +27,9 @@ public class ListadoColocacion extends JFrame {
 	private JPanel contentPane;
 	private JComboBox<PublicacionView> comboBoxPublicaciones;
 	private JComboBox<EdicionView> comboBoxEdiciones;
-	private JComboBox<Colocacion> comboBoxColocaciones;
+	private JComboBox<ColocacionView> comboBoxColocaciones;
 	private Vector<PublicacionView> publicaciones;
-	private Vector<Colocacion> colocaciones;
+	private Vector<ColocacionView> colocaciones;
 	
 	public ListadoColocacion() {
 		setPreferredSize(new Dimension(400, 230));
@@ -61,7 +61,7 @@ public class ListadoColocacion extends JFrame {
 		lblColocacin.setBounds(42, 94, 59, 14);
 		contentPane.add(lblColocacin);
 		
-		comboBoxColocaciones = new JComboBox<Colocacion>();
+		comboBoxColocaciones = new JComboBox<ColocacionView>();
 		comboBoxColocaciones.setBounds(121, 91, 199, 20);
 		contentPane.add(comboBoxColocaciones);		
 		
@@ -116,7 +116,7 @@ public class ListadoColocacion extends JFrame {
 		comboBoxColocaciones.removeAllItems();
 		colocaciones = Sistema.getInstance().getColocaciones(edicion.getCodigo());
 		
-		for (Colocacion colocacion : colocaciones) {
+		for (ColocacionView colocacion : colocaciones) {
 			comboBoxColocaciones.addItem(colocacion);
 		}
 		
