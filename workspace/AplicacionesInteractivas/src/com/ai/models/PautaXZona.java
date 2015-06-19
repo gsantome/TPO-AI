@@ -52,7 +52,11 @@ public class PautaXZona extends Pauta{
 		 * Ediciones por puesto en la zona
 		 */
 		int particionZona = (int) Math.round(totalEjemplares*0.7/contadorZona);
-		int particionFuera = (totalEjemplares - particionZona*contadorZona)/ (colocacionZona.size()-contadorZona);
+		int particionFuera = 0;
+		if( colocacionZona.size() - contadorZona > 0 ) {
+			particionFuera = (totalEjemplares - particionZona*contadorZona)/ (colocacionZona.size()-contadorZona);
+		}
+
 		int particion = 0;
 		while (iColocaciones.hasNext()){
 			item = iColocaciones.next();

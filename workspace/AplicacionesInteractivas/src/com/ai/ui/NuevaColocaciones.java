@@ -126,22 +126,31 @@ public class NuevaColocaciones extends JFrame {
 				
 				TiposPautas selectedPauta = (TiposPautas)comboBox.getSelectedItem(); 
 				
-				if( selectedPauta == TiposPautas.PorZona || selectedPauta == TiposPautas.PorAgotado) {
-					if( isNumeric(txtCondicional.getText()) ) {
+				try {
+					if( selectedPauta == TiposPautas.PorZona || selectedPauta == TiposPautas.PorAgotado) {
+						if( isNumeric(txtCondicional.getText()) ) {
+							loadDataByPauta();
+							
+							btnContinuar.setEnabled(true);
+						}
+						else {
+							btnContinuar.setEnabled(false);
+							
+							JOptionPane.showMessageDialog(null, "El valor ingresado debe ser numerico");
+						}
+					}
+					else {
 						loadDataByPauta();
 						
 						btnContinuar.setEnabled(true);
 					}
-					else {
-						btnContinuar.setEnabled(false);
-						
-						JOptionPane.showMessageDialog(null, "El valor ingresado debe ser numerico");
-					}
 				}
-				else {
-					loadDataByPauta();
+				catch(Exception ex) {
+					TiposPautas selectedPauta2 = (TiposPautas)comboBox.getSelectedItem();
 					
-					btnContinuar.setEnabled(true);
+					if( selectedPauta2.PorZona == TiposPautas.PorZona ) {
+						JOptionPane.showMessageDialog(null, "La zona ingresada no existe");
+					}
 				}
 				
 			}

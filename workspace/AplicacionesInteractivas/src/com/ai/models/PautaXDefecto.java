@@ -8,17 +8,34 @@ import com.ai.db.PersistenciaItemsColocacion;
 
 public class PautaXDefecto extends Pauta {
 
-
+	private int ejemplaresDisponibles;
 	
 	public int calcularEjemplares(ArrayList<ItemColocacion> historial){
 		int ejemplares = 0;
 		int devoluciones = 0;
 		int totalEntregados = 0;
+		
+		if( this.ejemplaresDisponibles == 0 ) {
+			return 0;
+		}
+		
 		for (ItemColocacion item : historial){
 			totalEntregados += item.getCantidadEjemplares();
 			devoluciones += item.getCantidadDevoluciones();
 		}
-		ejemplares = Math.round((totalEntregados - devoluciones) / historial.size());
+		
+		if( historial.size() == 0 ) {
+			ejemplares = this.ejemplaresDisponibles;
+		}
+		else {
+			ejemplares = Math.round((totalEntregados - devoluciones) / historial.size());
+		}
+		
+		this.ejemplaresDisponibles = this.ejemplaresDisponibles - ejemplares;
+		if( this.ejemplaresDisponibles < 0 ) {
+			this.ejemplaresDisponibles = 0;
+		}
+		
 		return ejemplares;
 	}
 
@@ -32,8 +49,10 @@ public class PautaXDefecto extends Pauta {
 		Puesto currentPuesto;
 		ArrayList<ItemColocacion> historial = null;
 		ItemColocacion itemColocacion;
+		
+		this.ejemplaresDisponibles = totalEjemplares;
+		
 		while (iterator.hasNext()){
-			
 			currentPuesto = iterator.next();
 			historial = PersistenciaItemsColocacion.getInstance().getLastThreeDayItems(currentPuesto.getCodigo(), idPublicacion);
 			itemColocacion = new ItemColocacion (currentPuesto.getCodigo(), calcularEjemplares(historial), 0,idEdicion, idPublicacion, new Date());
