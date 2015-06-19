@@ -50,7 +50,7 @@ public class ColocacionView {
 	
 	@Override
 	public String toString() {
-		return this.codigo + ": " + this.fecha;
+		return this.codigo + ": " + this.fecha + " " + this.pauta;
 	}
 	
 }

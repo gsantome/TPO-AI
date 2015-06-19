@@ -47,7 +47,7 @@ public class ListadoColocacionEdicion extends JFrame {
 		
 		DefaultTableModel model = new DefaultTableModel(0,0) {
 			Class[] columnTypes = new Class[] {
-				Integer.class, Integer.class, Integer.class
+				Integer.class, String.class, Integer.class, Date.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -58,7 +58,7 @@ public class ListadoColocacionEdicion extends JFrame {
 		       return false;
 		    }
 		};
-		model.setColumnIdentifiers(new String[] { "IdEdicion", "IdPuesto", "Ejemplares" });
+		model.setColumnIdentifiers(new String[] { "IdEdicion", "Puesto", "Ejemplares", "Fecha" });
 		tabla.setModel(model);
 		
 		JLabel lblColocacin = new JLabel("Colocaci\u00F3n:");
@@ -109,7 +109,8 @@ public class ListadoColocacionEdicion extends JFrame {
 				model.addRow(new Object[] { 
 						itemColocacion.getIdEdicion(), 
 						Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto()).getNombre(),
-						itemColocacion.getCantidadEjemplares() 
+						itemColocacion.getCantidadEjemplares(),
+						itemColocacion.getFechaColocacion()
 					});
 				
 				
