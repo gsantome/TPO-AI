@@ -12,6 +12,7 @@ import com.ai.business.Colocacion;
 import com.ai.db.PersistenciaPuestos;
 import com.ai.ui.Colocaciones;
 import com.ai.ui.Ediciones;
+import com.ai.ui.ListadoColocacion;
 
 public class Main {
 
@@ -50,7 +51,7 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 304, 220);
+		frame.setBounds(100, 100, 304, 283);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -75,5 +76,16 @@ public class Main {
 		});
 		btnAbmColocaciones.setBounds(15, 91, 252, 59);
 		frame.getContentPane().add(btnAbmColocaciones);
+		
+		JButton btnListadoColocacion = new JButton("Listado Colocación");
+		btnListadoColocacion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ListadoColocacion listadoFrame = new ListadoColocacion();
+				listadoFrame.pack();
+				listadoFrame.setVisible(true);
+			}
+		});
+		btnListadoColocacion.setBounds(15, 161, 252, 59);
+		frame.getContentPane().add(btnListadoColocacion);
 	}
 }

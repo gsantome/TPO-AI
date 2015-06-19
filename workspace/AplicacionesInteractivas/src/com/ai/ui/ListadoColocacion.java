@@ -1,7 +1,7 @@
 package com.ai.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 
 import com.ai.controller.Sistema;
-
+import com.ai.ui.models.*;
+import javax.swing.JButton;
 public class ListadoColocacion extends JFrame {
 
 	private JPanel contentPane;
@@ -24,24 +25,34 @@ public class ListadoColocacion extends JFrame {
 	 */
 	public ListadoColocacion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 279, 219);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(162, 36, 103, 20);
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(107, 33, 103, 20);
 		contentPane.add(comboBox);
-		Sistema.getInstance().
+		Vector<EdicionView> ediciones = Sistema.getInstance().getEdiciones();
+		for (int i = 0;i<ediciones.size();i++) {
+			comboBox.addItem(ediciones.elementAt(i).getTituloDeTapa());
+		}
 		
-		
-		JLabel lblColocaciones = new JLabel("Colocaciones");
-		lblColocaciones.setBounds(82, 39, 70, 14);
+		JLabel lblColocaciones = new JLabel("Ediciones");
+		lblColocaciones.setBounds(42, 36, 70, 14);
 		contentPane.add(lblColocaciones);
 		
-		JTree tree = new JTree();
-		tree.setBounds(10, 97, 72, 64);
-		contentPane.add(tree);
+		JLabel lblColocacin = new JLabel("Colocaci\u00F3n");
+		lblColocacin.setBounds(42, 76, 59, 14);
+		contentPane.add(lblColocacin);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(107, 73, 103, 20);
+		contentPane.add(comboBox_1);
+		
+		JButton btnGenerarListado = new JButton("Generar Listado");
+		btnGenerarListado.setBounds(95, 121, 115, 23);
+		contentPane.add(btnGenerarListado);
 	}
 }

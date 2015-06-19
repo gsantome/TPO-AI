@@ -152,6 +152,7 @@ public class Sistema {
 		return retorno;		
 	}
 	
+	
 	public void altaEdicion(EdicionView edicionView, int codigoPublicacion)
 	{
 		Edicion edicion = new Edicion(
@@ -250,7 +251,7 @@ public class Sistema {
 		
 		//Sistema.getInstance().guardarColocacion(colocacion);
 		PersistenciaColocaciones.getInstance().insert(colocacion);
-		
+		this.colocaciones.addElement(colocacion);
 		colocacion.removeObservers();
 	}
 	
