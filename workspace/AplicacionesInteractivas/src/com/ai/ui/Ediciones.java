@@ -374,8 +374,10 @@ public class Ediciones extends JFrame {
 	{
 		try
 		{
-			model.getDataVector().removeAllElements();
-			
+			int rowCount = model.getRowCount();
+			for (int i = rowCount - 1; i >= 0; i--) {
+			    model.removeRow(i);
+			}
 			PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
 			ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
 			
