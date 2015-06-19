@@ -15,16 +15,19 @@ import com.ai.ui.models.*;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import java.awt.Dimension;
 public class ListadoColocacionEdicion extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tabla;
-	private JTextField textField;
+	private JTextField fieldColocacion;
 	private JTextField fieldFechaCol;
 	private JTextField fieldPauta;
 	
-	public ListadoColocacionEdicion(Date fechacolocacion,String pauta,Vector<ItemColocacion> itemscolocacion) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public ListadoColocacionEdicion(int idcolocacion,Date fechacolocacion,String pauta,Vector<ItemColocacion> itemscolocacion) {
+		setPreferredSize(new Dimension(582, 450));
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 618, 439);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -44,37 +47,38 @@ public class ListadoColocacionEdicion extends JFrame {
 					});;
 		}
 		tabla = new JTable(model);
-		tabla.setBounds(10, 55, 582, 334);
+		tabla.setBounds(10, 55, 555, 334);
 		contentPane.add(tabla);
 		
 		JLabel lblColocacin = new JLabel("Colocaci\u00F3n:");
-		lblColocacin.setBounds(10, 11, 64, 14);
+		lblColocacin.setBounds(10, 11, 74, 14);
 		contentPane.add(lblColocacin);
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setBounds(70, 8, 86, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		fieldColocacion = new JTextField();
+		fieldColocacion.setEditable(false);
+		fieldColocacion.setBounds(94, 8, 74, 20);
+		contentPane.add(fieldColocacion);
+		fieldColocacion.setColumns(10);
+		fieldColocacion.setText(Integer.toString(idcolocacion));
 		
 		JLabel lblFecha = new JLabel("Fecha:");
-		lblFecha.setBounds(179, 11, 46, 14);
+		lblFecha.setBounds(188, 11, 46, 14);
 		contentPane.add(lblFecha);
 		
 		fieldFechaCol = new JTextField();
 		fieldFechaCol.setEditable(false);
-		fieldFechaCol.setBounds(218, 8, 86, 20);
+		fieldFechaCol.setBounds(234, 8, 86, 20);
 		contentPane.add(fieldFechaCol);
 		fieldFechaCol.setColumns(10);
 		fieldFechaCol.setText(fechacolocacion.toString());
 		
 		JLabel lblPauta = new JLabel("Pauta:");
-		lblPauta.setBounds(330, 11, 46, 14);
+		lblPauta.setBounds(341, 11, 46, 14);
 		contentPane.add(lblPauta);
 		
 		fieldPauta = new JTextField();
 		fieldPauta.setEditable(false);
-		fieldPauta.setBounds(367, 8, 86, 20);
+		fieldPauta.setBounds(388, 8, 86, 20);
 		contentPane.add(fieldPauta);
 		fieldPauta.setColumns(10);
 		fieldPauta.setText(pauta);
