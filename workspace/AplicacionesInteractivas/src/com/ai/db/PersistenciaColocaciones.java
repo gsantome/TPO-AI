@@ -78,8 +78,33 @@ public class PersistenciaColocaciones extends Persistencia {
 
 	@Override
 	public Vector<Object> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Vector<Object> list = new Vector<Object>();
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("select * from AplicacionesInteractivas.dbo.Colocaciones");
+			
+			ResultSet result = statement.executeQuery();
+			
+			while( result.next() ) {
+				int id = result.getInt("idColocacion");
+				int idEdicion = result.getInt("idEdicion");
+				String pauta = result.getString("pauta");
+				java.util.Date fecha = result.getDate("fecha");
+				
+				Colocacion colocacion = new Colocacion(id, idEdicion, pauta, fecha);
+				
+				list.add(colocacion);
+			}
+			
+			return list;
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		
+			return null;
+		}
 	}
 
 	@Override

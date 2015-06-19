@@ -80,6 +80,18 @@ public class Sistema {
 				puesto.getTipoPublicacion());
 	}
 	
+	public Vector<Colocacion> getColocaciones(int idEdicion) {
+		Vector<Colocacion> colocaciones = new Vector<Colocacion>();
+		
+		for (Colocacion colocacion : this.colocaciones) {
+			if( colocacion.getIdEdicion() == idEdicion ) {
+				colocaciones.add(colocacion);
+			}
+		}
+		
+		return colocaciones;
+	}
+	
 	public Vector<Puesto> getPuestos() {
 		
 		/*PersistenciaPuestos persistencia = PersistenciaPuestos.getInstance();
