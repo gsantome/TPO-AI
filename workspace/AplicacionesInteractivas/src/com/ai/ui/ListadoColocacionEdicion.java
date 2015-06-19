@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.ai.business.TiposPautas;
 import com.ai.controller.Sistema;
 import com.ai.models.ItemColocacion;
 import com.ai.ui.models.*;
@@ -15,6 +16,7 @@ import com.ai.ui.models.*;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import java.awt.Dimension;
 public class ListadoColocacionEdicion extends JFrame {
 
@@ -23,8 +25,12 @@ public class ListadoColocacionEdicion extends JFrame {
 	private JTextField fieldColocacion;
 	private JTextField fieldFechaCol;
 	private JTextField fieldPauta;
+	private Vector<ItemColocacion> colocaciones;
+	private DefaultTableModel model2;
 	
 	public ListadoColocacionEdicion(int idcolocacion,Date fechacolocacion,String pauta,Vector<ItemColocacion> itemscolocacion) {
+		this.colocaciones = itemscolocacion;
+		
 		setPreferredSize(new Dimension(582, 450));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,21 +40,26 @@ public class ListadoColocacionEdicion extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		tabla = new JTable();
 		
-		DefaultTableModel model = new DefaultTableModel();
-		model.addColumn("edicion");
-		model.addColumn("vendedor");
-		model.addColumn("carga");
-		for (int i=0;i<itemscolocacion.size();i++) {
-			model.addRow(new Object[] { 
-						itemscolocacion.elementAt(i).getIdEdicion(),
-						Sistema.getInstance().getPuesto(itemscolocacion.elementAt(i).getCodigoPuesto()).getNombre(),
-						itemscolocacion.elementAt(i).getCantidadEjemplares() 
-					});;
-		}
-		tabla = new JTable(model);
 		tabla.setBounds(10, 55, 555, 334);
 		contentPane.add(tabla);
+		
+		DefaultTableModel model = new DefaultTableModel(0,0) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, Integer.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			};
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
+		model.setColumnIdentifiers(new String[] { "IdEdicion", "IdPuesto", "Ejemplares" });
+		tabla.setModel(model);
 		
 		JLabel lblColocacin = new JLabel("Colocaci\u00F3n:");
 		lblColocacin.setBounds(10, 11, 74, 14);
@@ -82,6 +93,34 @@ public class ListadoColocacionEdicion extends JFrame {
 		contentPane.add(fieldPauta);
 		fieldPauta.setColumns(10);
 		fieldPauta.setText(pauta);
+		
+		this.loadData(model);
+		
+	}
+	
+	private void loadData(DefaultTableModel model) {
+		
+		try
+		{
+			model.getDataVector().removeAllElements();
+			
+			for (ItemColocacion itemColocacion : this.colocaciones) {
+				
+				model.addRow(new Object[] { 
+						itemColocacion.getIdEdicion(), 
+						Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto()).getNombre(),
+						itemColocacion.getCantidadEjemplares() 
+					});
+				
+				
+				
+			}
+
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 		
 	}
 }

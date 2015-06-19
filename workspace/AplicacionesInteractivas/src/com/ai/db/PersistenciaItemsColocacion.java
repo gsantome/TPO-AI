@@ -54,6 +54,38 @@ public class PersistenciaItemsColocacion extends Persistencia {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public Vector<ItemColocacion> getItemsColocacionByColocacion(int idColocacion) {
+		try {
+			Vector<ItemColocacion> list = new Vector<ItemColocacion>();
+			
+			Connection conn = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM AplicacionesInteractivas.dbo.ItemsColocaciones WHERE idColocacion = ? ORDER BY fecha DESC");
+			statement.setInt(1, idColocacion);
+			
+			ResultSet result = statement.executeQuery();
+			
+			while( result.next() ) {
+				int id = result.getInt("idPublicacion");
+				int ejemplares = result.getInt("totalEjemplaresEntregados");
+				int devoluciones = result.getInt("totalEjemplaresDevueltos");
+				int idEdicion = result.getInt("idEdicion");
+				int idPublicacion = result.getInt("idPublicacion");
+				Date date = result.getDate("fecha");
+				
+				ItemColocacion itemColocacion = new ItemColocacion(id, ejemplares, devoluciones, idEdicion, idPublicacion, date);		
+				list.add(itemColocacion);
+			}
+			
+			return list;
+		}
+		catch(Exception ex) {
+			System.err.println("Error: " + ex.getMessage());
+			System.err.println(ex.getStackTrace());
+		
+			return null;
+		}
+	}
 
 	public ArrayList<ItemColocacion> getLastThreeDayItems(int idPuesto, int idPublicacion) {
 		// debe devolver la lista del mas nuevo al mas viejo. Solo los ultimos 3 dias
@@ -122,20 +154,21 @@ public class PersistenciaItemsColocacion extends Persistencia {
 		return last;
 	}
 
-	public void insertAll(Vector<ItemColocacion> itemsColocaciones) {
+	public void insertAll(int idColocacion, Vector<ItemColocacion> itemsColocaciones) {
 		
 		try {
 			Connection conn = PoolConnection.getPoolConnection().getConnection();
 			
 			for (ItemColocacion itemColocacion : itemsColocaciones) {
 				
-				PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.ItemsColocaciones (idPuesto, totalEjemplaresEntregados, totalEjemplaresDevueltos, idPublicacion, idEdicion, fecha) values (?, ?, ?, ?, ?, ?)");
+				PreparedStatement statement = conn.prepareStatement("insert into AplicacionesInteractivas.dbo.ItemsColocaciones (idPuesto, totalEjemplaresEntregados, totalEjemplaresDevueltos, idPublicacion, idEdicion, fecha, idColocacion) values (?, ?, ?, ?, ?, ?, ?)");
 				statement.setInt(1, itemColocacion.getCodigoPuesto());
 				statement.setInt(2, itemColocacion.getCantidadEjemplares());
 				statement.setInt(3, itemColocacion.getCantidadDevoluciones());
 				statement.setInt(4, itemColocacion.getIdPublicacion());
 				statement.setInt(5, itemColocacion.getIdEdicion());
 				statement.setDate(6, new java.sql.Date(itemColocacion.getFechaColocacion().getTime()));
+				statement.setInt(7, idColocacion);
 				
 				statement.executeUpdate();
 				

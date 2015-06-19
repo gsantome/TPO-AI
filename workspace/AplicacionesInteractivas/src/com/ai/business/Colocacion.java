@@ -98,4 +98,9 @@ public class Colocacion implements Observable {
 		}
 		
 	}
+	
+	@Override
+	public String toString() {
+		return this.getCodigo() + ": " + this.getFecha().toString() + " - " + this.getPauta();
+	}
 }

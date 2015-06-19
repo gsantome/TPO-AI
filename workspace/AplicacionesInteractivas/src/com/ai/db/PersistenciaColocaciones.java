@@ -3,11 +3,10 @@ package com.ai.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
 import java.util.Vector;
 
 import com.ai.business.Colocacion;
-import com.ai.models.Edicion;
+import com.ai.models.ItemColocacion;
 
 public class PersistenciaColocaciones extends Persistencia {
 	
@@ -41,18 +40,18 @@ public class PersistenciaColocaciones extends Persistencia {
 			
 			statement.executeUpdate();
 			
-//			PreparedStatement statement2 = conn.prepareStatement("SELECT @@IDENTITY as codigo");
-//			ResultSet generatedKeys = statement2.executeQuery();
-//			int colocacionId = -1;
-//			
-//			while( generatedKeys.next() ) {
-//				colocacionId = generatedKeys.getInt("codigo");
-//				
-//				break;
-//			}
+			PreparedStatement statement2 = conn.prepareStatement("SELECT @@IDENTITY as codigo");
+			ResultSet generatedKeys = statement2.executeQuery();
+			int colocacionId = -1;
+			
+			while( generatedKeys.next() ) {
+				colocacionId = generatedKeys.getInt("codigo");
+				
+				break;
+			}
 			
 			//Segundo guardo los items colocacion
-			PersistenciaItemsColocacion.getInstance().insertAll(colocacion.getItemsColocaciones());
+			PersistenciaItemsColocacion.getInstance().insertAll(colocacionId, colocacion.getItemsColocaciones());
 			
 		}
 		catch( Exception ex ) {
@@ -93,6 +92,12 @@ public class PersistenciaColocaciones extends Persistencia {
 				java.util.Date fecha = result.getDate("fecha");
 				
 				Colocacion colocacion = new Colocacion(id, idEdicion, pauta, fecha);
+				
+				Vector<ItemColocacion> itemsColocacion = PersistenciaItemsColocacion.getInstance().getItemsColocacionByColocacion(id);
+				
+				for (ItemColocacion itemColocacion : itemsColocacion) {
+					colocacion.addItemColocacion(itemColocacion);
+				}
 				
 				list.add(colocacion);
 			}
