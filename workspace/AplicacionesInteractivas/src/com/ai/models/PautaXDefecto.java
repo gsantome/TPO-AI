@@ -18,7 +18,10 @@ public class PautaXDefecto extends Pauta {
 			totalEntregados += item.getCantidadEjemplares();
 			devoluciones += item.getCantidadDevoluciones();
 		}
-		ejemplares = Math.round((totalEntregados - devoluciones) / historial.size());
+		if (historial.size() == 0)
+			ejemplares = Math.round(totalEntregados - devoluciones);
+		else
+			ejemplares = Math.round((totalEntregados - devoluciones) / historial.size());
 		return ejemplares;
 	}
 
