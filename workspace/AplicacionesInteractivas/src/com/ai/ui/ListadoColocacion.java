@@ -67,7 +67,7 @@ public class ListadoColocacion extends JFrame {
 		JButton btnGenerarListado = new JButton("Generar Listado");
 		btnGenerarListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(Sistema.getInstance().);
+				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(colocacion.);
 				resultado.pack();
 				resultado.setVisible(true);
 			}

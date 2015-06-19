@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import com.ai.db.PersistenciaPuestos;
 import com.ai.ui.Colocaciones;
 import com.ai.ui.Ediciones;
+import com.ai.ui.ListadoColocacion;
 
 public class Main {
 
@@ -49,7 +50,7 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 304, 283);
+		frame.setBounds(100, 100, 297, 279);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -78,12 +79,12 @@ public class Main {
 		JButton btnListadoColocacion = new JButton("Listado Colocación");
 		btnListadoColocacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Colocaciones listadoFrame = new Colocaciones();
+				ListadoColocacion listadoFrame = new ListadoColocacion();
 				listadoFrame.pack();
 				listadoFrame.setVisible(true);
 			}
 		});
-		btnListadoColocacion.setBounds(15, 161, 252, 59);
+		btnListadoColocacion.setBounds(15, 165, 252, 59);
 		frame.getContentPane().add(btnListadoColocacion);
 	}
 }
