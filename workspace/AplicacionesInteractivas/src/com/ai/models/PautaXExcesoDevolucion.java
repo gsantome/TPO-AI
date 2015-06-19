@@ -37,9 +37,6 @@ public class PautaXExcesoDevolucion extends Pauta {
 	}
 	
 	private int descuentoTablaPorExceso(int totalEmplares, int nroDevoluciones){
-		/*
-		 * Se debe implementar la tabla por exceso. Este calculo es temporal.
-		 */
 		int diferencia = nroDevoluciones-totalEmplares;
 		int descuento = 0;
 		if (diferencia > 0){
