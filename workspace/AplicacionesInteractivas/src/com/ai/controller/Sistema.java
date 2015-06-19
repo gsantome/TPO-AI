@@ -272,4 +272,14 @@ public class Sistema {
 		
 		colocacion.registerObserver(editor);
 	}
+	
+	public Vector<ItemColocacion> getItemsColocacion(int idcolocacion) {
+		Vector<ItemColocacion> items = new Vector<ItemColocacion>();
+		for(Colocacion colocacion: colocaciones)
+			if (colocacion.getCodigo()==idcolocacion) {
+				items = colocacion.getItemsColocaciones();
+			}
+		return items;	
+	}
+	
 }

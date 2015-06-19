@@ -69,8 +69,9 @@ public class ListadoColocacion extends JFrame {
 		btnGenerarListado.setBounds(121, 135, 138, 23);
 		btnGenerarListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Colocacion colocacion = (Colocacion)comboBoxColocaciones.getSelectedItem();
-				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(colocacion.getCodigo(),colocacion.getFecha(),colocacion.getPauta(),colocacion.getItemsColocaciones());
+				ColocacionView colocacion = (ColocacionView)comboBoxColocaciones.getSelectedItem();
+				
+				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(colocacion.getCodigo(),colocacion.getFecha(),colocacion.getPauta(), Sistema.getInstance().getItemsColocacion(colocacion.getCodigo()));
 				resultado.pack();
 				resultado.setVisible(true);
 			}
