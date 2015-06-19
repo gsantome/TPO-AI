@@ -87,6 +87,7 @@ public class ListadoColocacion extends JFrame {
 		comboBoxPublicaciones.setBounds(121, 29, 199, 20);
 		contentPane.add(comboBoxPublicaciones);
 		loadPublicaciones();
+		comboBoxPublicaciones.setSelectedIndex(-1);
 		comboBoxPublicaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
