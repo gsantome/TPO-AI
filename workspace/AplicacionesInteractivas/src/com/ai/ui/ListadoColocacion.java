@@ -1,6 +1,5 @@
 package com.ai.ui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -16,63 +15,111 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 
+import com.ai.business.Colocacion;
 import com.ai.controller.Sistema;
 import com.ai.ui.models.*;
 
 import javax.swing.JButton;
+import java.awt.Window.Type;
+import java.awt.Dimension;
 public class ListadoColocacion extends JFrame {
 
 	private JPanel contentPane;
-	/**
-	 * Create the frame.
-	 */
+	private JComboBox<PublicacionView> comboBoxPublicaciones;
+	private JComboBox<EdicionView> comboBoxEdiciones;
+	private JComboBox<Colocacion> comboBoxColocaciones;
+	private Vector<PublicacionView> publicaciones;
+	private Vector<Colocacion> colocaciones;
+	
 	public ListadoColocacion() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 279, 219);
+		setPreferredSize(new Dimension(400, 230));
+		setType(Type.POPUP);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 367, 219);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(107, 33, 103, 20);
-		contentPane.add(comboBox);
-		Vector<EdicionView> ediciones = Sistema.getInstance().getEdiciones();
-		for (int i = 0;i<ediciones.size();i++) {
-			comboBox.addItem(ediciones.elementAt(i).getTituloDeTapa());
-		}
+		comboBoxEdiciones = new JComboBox<EdicionView>();
+		comboBoxEdiciones.setBounds(121, 60, 199, 20);
+		contentPane.add(comboBoxEdiciones);
+		comboBoxEdiciones.addActionListener(new ActionListener(){
+		     public void actionPerformed(ActionEvent ee) {
+		    	 	EdicionView edicion = (EdicionView)comboBoxEdiciones.getSelectedItem();
+		    	 	loadColocaciones(edicion);
+		 		}
+		     
+		});
 		
 		JLabel lblColocaciones = new JLabel("Ediciones");
-		lblColocaciones.setBounds(42, 36, 70, 14);
+		lblColocaciones.setBounds(42, 63, 70, 14);
 		contentPane.add(lblColocaciones);
 		
 		JLabel lblColocacin = new JLabel("Colocaci\u00F3n");
-		lblColocacin.setBounds(42, 76, 59, 14);
+		lblColocacin.setBounds(42, 94, 59, 14);
 		contentPane.add(lblColocacin);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(107, 73, 103, 20);
-		contentPane.add(comboBox_1);
-		comboBox.addActionListener(new ActionListener(){
-		     public void actionPerformed(ActionEvent ee) {
-		          /*Sistema.getInstance() colocaciones para la edicion seleccionda
-		    	 for (int i = 0;i<colocaciones.size();i++) {
-		 			comboBox_1.addItem(colocaciones.elementAt(i).get);
-		 		}
-		 		*/
-		     }
-		});
-		
+		comboBoxColocaciones = new JComboBox<Colocacion>();
+		comboBoxColocaciones.setBounds(121, 91, 199, 20);
+		contentPane.add(comboBoxColocaciones);		
 		
 		JButton btnGenerarListado = new JButton("Generar Listado");
+		btnGenerarListado.setBounds(121, 135, 138, 23);
 		btnGenerarListado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(colocacion.);
+				Colocacion colocacion = (Colocacion)comboBoxColocaciones.getSelectedItem();
+				ListadoColocacionEdicion resultado = new ListadoColocacionEdicion(colocacion.getFecha(),colocacion.getPauta(),colocacion.getItemsColocaciones());
 				resultado.pack();
 				resultado.setVisible(true);
 			}
 		});
-		btnGenerarListado.setBounds(95, 121, 115, 23);
 		contentPane.add(btnGenerarListado);
+		
+		JLabel lblPublicacin = new JLabel("Publicaci\u00F3n");
+		lblPublicacin.setBounds(42, 32, 70, 14);
+		contentPane.add(lblPublicacin);
+		comboBoxPublicaciones = new JComboBox<PublicacionView>();
+		comboBoxPublicaciones.setBounds(121, 29, 199, 20);
+		contentPane.add(comboBoxPublicaciones);
+		loadPublicaciones();
+		comboBoxPublicaciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
+				
+				loadEdicion(publicacion);
+			}
+		});
 	}
+	
+	private void loadPublicaciones() {
+		publicaciones = Sistema.getInstance().getPublicaciones();
+		
+		for (PublicacionView publicacion : publicaciones) {
+			comboBoxPublicaciones.addItem(publicacion);
+		}
+		
+	}
+	
+	private void loadEdicion(PublicacionView publicacion) {
+		comboBoxEdiciones.removeAllItems();
+		
+		Vector<EdicionView> ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
+		
+		for (EdicionView edicion : ediciones) {
+			comboBoxEdiciones.addItem(edicion);
+		}
+	}
+	
+	private void loadColocaciones(EdicionView edicion) {
+		comboBoxColocaciones.removeAllItems();
+		colocaciones = Sistema.getInstance().getColocaciones(edicion.getCodigo());
+		
+		for (Colocacion colocacion : colocaciones) {
+			comboBoxColocaciones.addItem(colocacion);
+		}
+		
+	}
+	
 }

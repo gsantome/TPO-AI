@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.ai.controller.Sistema;
+import com.ai.models.ItemColocacion;
 import com.ai.ui.models.*;
 
 import javax.swing.JTable;
@@ -22,7 +23,7 @@ public class ListadoColocacionEdicion extends JFrame {
 	private JTextField fieldFechaCol;
 	private JTextField fieldPauta;
 	
-	public ListadoColocacionEdicion(Date fechacolocacion,String pauta,Vector<ItemColocacionView> itemscolocacion) {
+	public ListadoColocacionEdicion(Date fechacolocacion,String pauta,Vector<ItemColocacion> itemscolocacion) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 618, 439);
 		contentPane = new JPanel();
@@ -30,11 +31,19 @@ public class ListadoColocacionEdicion extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		tabla = new JTable();
-		DefaultTableModel model = (DefaultTableModel)tabla.getModel();
+		
+		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("edicion");
 		model.addColumn("vendedor");
 		model.addColumn("carga");
+		for (int i=0;i<itemscolocacion.size();i++) {
+			model.addRow(new Object[] { 
+						itemscolocacion.elementAt(i).getIdEdicion(),
+						Sistema.getInstance().getPuesto(itemscolocacion.elementAt(i).getCodigoPuesto()).getNombre(),
+						itemscolocacion.elementAt(i).getCantidadEjemplares() 
+					});;
+		}
+		tabla = new JTable(model);
 		tabla.setBounds(10, 55, 582, 334);
 		contentPane.add(tabla);
 		
@@ -43,6 +52,7 @@ public class ListadoColocacionEdicion extends JFrame {
 		contentPane.add(lblColocacin);
 		
 		textField = new JTextField();
+		textField.setEditable(false);
 		textField.setBounds(70, 8, 86, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -52,6 +62,7 @@ public class ListadoColocacionEdicion extends JFrame {
 		contentPane.add(lblFecha);
 		
 		fieldFechaCol = new JTextField();
+		fieldFechaCol.setEditable(false);
 		fieldFechaCol.setBounds(218, 8, 86, 20);
 		contentPane.add(fieldFechaCol);
 		fieldFechaCol.setColumns(10);
@@ -62,19 +73,11 @@ public class ListadoColocacionEdicion extends JFrame {
 		contentPane.add(lblPauta);
 		
 		fieldPauta = new JTextField();
+		fieldPauta.setEditable(false);
 		fieldPauta.setBounds(367, 8, 86, 20);
 		contentPane.add(fieldPauta);
 		fieldPauta.setColumns(10);
 		fieldPauta.setText(pauta);
-		
-		
-		for (int i=0;i<itemscolocacion.size();i++) {
-			model.addRow(new Object[] { 
-						itemscolocacion.elementAt(i).getIdEdicion(),
-						Sistema.getInstance().getPuesto(itemscolocacion.elementAt(i).getCodigoPuesto()).getNombre(),
-						itemscolocacion.elementAt(i).getCantidadEjemplares() 
-					});;
-		}
 		
 	}
 }
