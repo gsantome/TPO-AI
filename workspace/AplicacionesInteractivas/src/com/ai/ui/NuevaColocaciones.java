@@ -21,13 +21,8 @@ import javax.swing.table.DefaultTableModel;
 import com.ai.business.Colocacion;
 import com.ai.business.TiposPautas;
 import com.ai.controller.Sistema;
-import com.ai.models.ItemColocacion;
-import com.ai.models.Pauta;
-import com.ai.models.PautaXAgotado;
-import com.ai.models.PautaXDefecto;
-import com.ai.models.PautaXExcesoDevolucion;
-import com.ai.models.PautaXZona;
-import com.ai.models.Puesto;
+import com.ai.ui.models.ItemColocacionView;
+import com.ai.ui.models.PuestoView;
 
 public class NuevaColocaciones extends JFrame {
 
@@ -43,7 +38,7 @@ public class NuevaColocaciones extends JFrame {
 	private int cantidadEjemplares;
 	private int idPublicacion;
 	private int idEdicion;
-	private ArrayList<ItemColocacion> colocaciones;
+	private ArrayList<ItemColocacionView> colocaciones;
 	
 
 	/**
@@ -212,9 +207,9 @@ public class NuevaColocaciones extends JFrame {
 			    dm.removeRow(i);
 			}
 			
-			for (ItemColocacion itemColocacion : colocaciones) {
+			for (ItemColocacionView itemColocacion : colocaciones) {
 				
-				Puesto puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
+				PuestoView puesto = Sistema.getInstance().getPuesto(itemColocacion.getCodigoPuesto());
 				
 				model.addRow(new Object[] { 
 						puesto.getNombre(), 

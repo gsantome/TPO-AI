@@ -16,18 +16,18 @@ import javax.swing.border.EmptyBorder;
 
 import com.ai.business.Colocacion;
 import com.ai.controller.Sistema;
-import com.ai.models.Edicion;
-import com.ai.models.Publicacion;
 import com.ai.observer.Editor;
+import com.ai.ui.models.EdicionView;
+import com.ai.ui.models.PublicacionView;
 
 public class Colocaciones extends JFrame {
 
 	private JPanel contentPane;
 	
-	private JComboBox<Publicacion> comboBoxPublicaciones;
-	private JComboBox<Edicion> comboBoxEdiciones;
+	private JComboBox<PublicacionView> comboBoxPublicaciones;
+	private JComboBox<EdicionView> comboBoxEdiciones;
 	
-	private Vector<Publicacion> publicaciones;
+	private Vector<PublicacionView> publicaciones;
 	private JLabel lblCantEjemplares;
 	private JTextField txtCantidadEjemplares;
 
@@ -47,10 +47,10 @@ public class Colocaciones extends JFrame {
 		lblSeleccionesLaPublicacion.setBounds(10, 25, 184, 14);
 		contentPane.add(lblSeleccionesLaPublicacion);
 		
-		comboBoxPublicaciones = new JComboBox<Publicacion>();
+		comboBoxPublicaciones = new JComboBox<PublicacionView>();
 		comboBoxPublicaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+				PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
 				
 				loadEdicion(publicacion);
 			}
@@ -62,7 +62,7 @@ public class Colocaciones extends JFrame {
 		lblSeleccioneLaEdicion.setBounds(10, 64, 171, 14);
 		contentPane.add(lblSeleccioneLaEdicion);
 		
-		comboBoxEdiciones = new JComboBox<Edicion>();
+		comboBoxEdiciones = new JComboBox<EdicionView>();
 		comboBoxEdiciones.setBounds(196, 55, 274, 33);
 		contentPane.add(comboBoxEdiciones);
 		
@@ -73,8 +73,8 @@ public class Colocaciones extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				if( isNumeric(txtCantidadEjemplares.getText()) ) {
-					int idPublicacion = ((Publicacion)comboBoxPublicaciones.getSelectedItem()).getCodigo();
-					int idEdicion = ((Edicion)comboBoxEdiciones.getSelectedItem()).getCodigo();
+					int idPublicacion = ((PublicacionView)comboBoxPublicaciones.getSelectedItem()).getCodigo();
+					int idEdicion = ((EdicionView)comboBoxEdiciones.getSelectedItem()).getCodigo();
 					int cantEjemplares = Integer.parseInt(txtCantidadEjemplares.getText());
 					
 					Colocacion colocacion = new Colocacion();
@@ -108,7 +108,7 @@ public class Colocaciones extends JFrame {
 	}
 	
 	private void inicializarObserver(Colocacion colocacion) {
-		Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+		PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
 		
 		Sistema.getInstance().inicializarObservers(colocacion, publicacion.getEditor());
 	}
@@ -117,18 +117,18 @@ public class Colocaciones extends JFrame {
 		
 		publicaciones = Sistema.getInstance().getPublicaciones();
 		
-		for (Publicacion publicacion : publicaciones) {
+		for (PublicacionView publicacion : publicaciones) {
 			comboBoxPublicaciones.addItem(publicacion);
 		}
 		
 	}
 	
-	private void loadEdicion(Publicacion publicacion) {
+	private void loadEdicion(PublicacionView publicacion) {
 		comboBoxEdiciones.removeAllItems();
 		
-		Vector<Edicion> ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
+		Vector<EdicionView> ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
 		
-		for (Edicion edicion : ediciones) {
+		for (EdicionView edicion : ediciones) {
 			comboBoxEdiciones.addItem(edicion);
 		}
 	}

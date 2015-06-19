@@ -27,14 +27,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.ai.controller.Sistema;
-import com.ai.models.Edicion;
-import com.ai.models.Publicacion;
+import com.ai.ui.models.EdicionView;
+import com.ai.ui.models.PublicacionView;
 
 public class Ediciones extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JComboBox<Publicacion> comboBoxPublicaciones;
+	private JComboBox<PublicacionView> comboBoxPublicaciones;
 	private JTextField textFieldTitulo;
 	private JTextField textFieldPrecio;
 	private JTextField textFieldNEjemplares;
@@ -46,8 +46,8 @@ public class Ediciones extends JFrame {
 	private JLabel lblFechaDeSalida;
 	private JLabel lblError;
 	
-	private Vector<Publicacion> publicaciones;
-	private Vector<Edicion> ediciones;
+	private Vector<PublicacionView> publicaciones;
+	private Vector<EdicionView> ediciones;
 	private JButton btnAgregar;
 	private JButton btnEditar;
 	private JButton btnEliminar;
@@ -110,7 +110,7 @@ public class Ediciones extends JFrame {
 		model.setColumnIdentifiers(new String[] { "Codigo", "Titulo", "Ejemplares", "Precio", "Fecha salida" });
 		table.setModel(model);
 		
-		comboBoxPublicaciones = new JComboBox<Publicacion>();
+		comboBoxPublicaciones = new JComboBox<PublicacionView>();
 		comboBoxPublicaciones.setBounds(15, 31, 202, 20);
 		comboBoxPublicaciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -206,7 +206,7 @@ public class Ediciones extends JFrame {
 		            		lblError.setText("Formato de fecha inválida. Formato correcto yyyy-MM-dd");
 		            	else
 		            	{
-			            	Edicion edicion = new Edicion (
+			            	EdicionView edicion = new EdicionView (
 			            			0,
 			            			textFieldTitulo.getText(),
 			            			Float.parseFloat(textFieldPrecio.getText()),
@@ -214,17 +214,19 @@ public class Ediciones extends JFrame {
 			            			Integer.decode(textFieldNEjemplares.getText())
 			            			);
 			            	
-			    			Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
+			    			PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
 							
 							Sistema.getInstance().altaEdicion(edicion, publicacion.getCodigo());
 							
-							model.addRow(new Object[] {
+							loadEdiciones(model);
+							
+							/*model.addRow(new Object[] {
 									edicion.getCodigo(),
 									edicion.getTituloDeTapa(),
 									edicion.getPrecio(),
 									edicion.getCantidadEjemplares(),
 									edicion.getFechaSalida()
-									});
+									});*/
 		            	}
 	            	}
 	            	catch(Exception ex)
@@ -272,7 +274,7 @@ public class Ediciones extends JFrame {
 						model.setValueAt(textFieldFecha.getText(), table.getSelectedRow(), 4);
 						
 						//Llamar Modificacion
-						Edicion edicion = new Edicion (
+						EdicionView edicion = new EdicionView (
 		            			Integer.decode(model.getValueAt(table.getSelectedRow(), 0).toString()),
 		            			textFieldTitulo.getText(),
 		            			Float.parseFloat(textFieldPrecio.getText()),
@@ -357,7 +359,7 @@ public class Ediciones extends JFrame {
 		{
 			publicaciones = Sistema.getInstance().getPublicaciones();
 			
-			for (Publicacion publicacion : publicaciones) {
+			for (PublicacionView publicacion : publicaciones) {
 				comboBoxPublicaciones.addItem(publicacion);
 			}
 		}
@@ -374,10 +376,10 @@ public class Ediciones extends JFrame {
 		{
 			model.getDataVector().removeAllElements();
 			
-			Publicacion publicacion = (Publicacion)comboBoxPublicaciones.getSelectedItem();
-			ediciones = Sistema.getInstance().getEdicionesByPublicacion(publicacion.getCodigo());
+			PublicacionView publicacion = (PublicacionView)comboBoxPublicaciones.getSelectedItem();
+			ediciones = Sistema.getInstance().getEdiciones(publicacion.getCodigo());
 			
-			for (Edicion edicion : ediciones) {
+			for (EdicionView edicion : ediciones) {
 				model.addRow(new Object[] { edicion.getCodigo(), edicion.getTituloDeTapa(), edicion.getPrecio(), edicion.getCantidadEjemplares(), edicion.getFechaSalida()});
 			}
 		}

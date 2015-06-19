@@ -76,8 +76,8 @@ public class Colocacion implements Observable {
 		return itemsColocaciones;
 	}
 	
-	public void addItemColocacion( ItemColocacion itemColocacion ) {
-		this.itemsColocaciones.add( itemColocacion );
+	public void addItemColocacion(ItemColocacion itemColocacion) {
+		this.itemsColocaciones.add(itemColocacion);
 	}
 
 	@Override

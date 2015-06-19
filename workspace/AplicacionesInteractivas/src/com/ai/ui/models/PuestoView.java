@@ -1,8 +1,8 @@
-package com.ai.models;
+package com.ai.ui.models;
 
 import java.util.ArrayList;
 
-public class Puesto {
+public class PuestoView {
 	private int codigo;
 	private String direccion;
 	private String nombre;
@@ -10,11 +10,11 @@ public class Puesto {
 	private int idZona;
 	private String tipoPublicacion;
 	
-	public Puesto() {
+	public PuestoView() {
 		
 	}
 	
-	public Puesto(int codigo, String nombre, String direccion, String barrio, int idZona, String tipoPublicacion) {
+	public PuestoView(int codigo, String nombre, String direccion, String barrio, int idZona, String tipoPublicacion) {
 		this.codigo = codigo;
 		this.direccion = direccion;
 		this.nombre = nombre;
@@ -48,7 +48,7 @@ public class Puesto {
 		this.tipoPublicacion = tipoPublicacion;
 	}
 	
-	public ArrayList<ItemColocacion> getUltimasColocaciones(int cantidad){
+	public ArrayList<ItemColocacionView> getUltimasColocaciones(int cantidad){
 		return null;
 	}
 
@@ -59,7 +59,7 @@ public class Puesto {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
+	
 	public String getBarrio() {
 		return this.barrio;
 	}
@@ -67,5 +67,6 @@ public class Puesto {
 	public void setBarrio(String barrio){
 		this.barrio = barrio;
 	}
+
 	
 }
