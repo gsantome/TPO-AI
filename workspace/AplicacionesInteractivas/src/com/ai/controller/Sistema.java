@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
-import javax.swing.table.DefaultTableModel;
-
 import com.ai.business.Colocacion;
 import com.ai.business.TiposPautas;
 import com.ai.db.PersistenciaColocaciones;

@@ -118,7 +118,7 @@ public class PersistenciaEdiciones extends Persistencia {
 				int id = result.getInt("idEdicion");
 				String tituloDeTapa = result.getString("tituloTapa");
 				double precio = result.getDouble("precio");
-				Date fechaSalida = result.getTimestamp("fechaSalida");
+				java.util.Date fechaSalida = result.getDate("fechaSalida");
 				int cantidadEjemplares = result.getInt("cantidadEjemplares");
 				
 				Edicion edicion = new Edicion(id, tituloDeTapa, precio, fechaSalida, cantidadEjemplares);

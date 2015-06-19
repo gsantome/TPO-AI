@@ -16,11 +16,10 @@ import javax.swing.border.EmptyBorder;
 
 import com.ai.business.Colocacion;
 import com.ai.controller.Sistema;
-import com.ai.observer.Editor;
 import com.ai.ui.models.EdicionView;
 import com.ai.ui.models.PublicacionView;
 
-public class Colocaciones extends JFrame {
+public class Colocaciones  extends JFrame {
 
 	private JPanel contentPane;
 	

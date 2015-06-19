@@ -8,11 +8,9 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.ai.business.Colocacion;
 import com.ai.db.PersistenciaPuestos;
 import com.ai.ui.Colocaciones;
 import com.ai.ui.Ediciones;
-import com.ai.ui.ListadoColocacion;
 
 public class Main {
 
@@ -80,7 +78,7 @@ public class Main {
 		JButton btnListadoColocacion = new JButton("Listado Colocación");
 		btnListadoColocacion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ListadoColocacion listadoFrame = new ListadoColocacion();
+				Colocaciones listadoFrame = new Colocaciones();
 				listadoFrame.pack();
 				listadoFrame.setVisible(true);
 			}
