@@ -220,13 +220,6 @@ public class Ediciones extends JFrame {
 							
 							loadEdiciones(model);
 							
-							/*model.addRow(new Object[] {
-									edicion.getCodigo(),
-									edicion.getTituloDeTapa(),
-									edicion.getPrecio(),
-									edicion.getCantidadEjemplares(),
-									edicion.getFechaSalida()
-									});*/
 		            	}
 	            	}
 	            	catch(Exception ex)
